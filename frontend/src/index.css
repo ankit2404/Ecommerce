@@ -1,0 +1,23 @@
+main {
+  min-height: 80vh;
+}
+
+h3 {
+  padding: 1rem 0;
+}
+
+.rating span {
+  margin: 0.1rem;
+}
+
+#prod_name {
+  text-decoration: none;
+}
+#prod_name:hover {
+  text-decoration: underline;
+}
+
+#btz {
+  margin: auto;
+  display: flex;
+}
