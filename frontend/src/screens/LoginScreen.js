@@ -1,75 +1,119 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import FormContainer from '../components/FormContainer'
-import { login } from '../actions/userAction'
-
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import { login } from "../actions/userAction";
+// import "../styles/login.css";
+import classes from "../styles/login.module.css"
 const LoginScreen = ({ location, history }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { loading, error, userInfo } = userLogin
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect)
+      history.push(redirect);
     }
-  }, [history, userInfo, redirect])
+  }, [history, userInfo, redirect]);
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(login(email, password))
-  }
+    e.preventDefault();
+    dispatch(login(email, password));
+  };
 
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
-      {error && <Message variant='danger'>{error}</Message>}
+    <div>
+      {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='email'>
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            type='email'
-            placeholder='Enter email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+      <section className={classes['ftco-section']}>
+        <div className={classes.container}>
+          <div className={`${classes.row} ${classes['justify-content-center']}`}>
+            <div className={`${classes["col-md-12"]} ${classes['col-lg-10']}`}>
+              <div className={`${classes.wrap} ${classes["d-md-flex"]}`}>
+                <div className={`${classes['text-wrap']} ${classes['p-4']} ${classes['p-lg-5']} ${classes['text-center']} ${classes['d-flex']} ${classes['align-items-center']} ${classes['order-md-last']}`}>
+                  <div className={`${classes['text']} ${classes['w-100']}`}>
+                    <p style={{color : '#ffffff', fontSize : '1.8rem' , fontWeight : "bold"}}>Welcome to AngelShop</p>
+                    <p>Don't have an account?</p>
+                    <Link
+                      to={
+                        redirect
+                          ? `/register?redirect=${redirect}`
+                          : "/register"
+                      }
+                      className={`${classes['btn']} ${classes['btn-white']} ${classes['btn-outline-white']}`}
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                </div>
+                <div className={`${classes['login-wrap']} ${classes['p-4']} ${classes['p-lg-5']} `}>
+                  <div className={`${classes['d-flex']}`}>
+                    <div className={`${classes['w-100']}`}>
+                      <h2 className={`${classes['mb-4']}`}>Sign In</h2>
+                    </div>
+                    <div className={`${classes['w-100']}`}>
+                      <p className={ `${classes['d-flex']} ${classes['social-media']} ${classes['justify-content-end']}`}></p>
+                    </div>
+                  </div>
+                  <Form onSubmit={submitHandler}>
+                    <div className={`${classes['form-group']} ${classes['mb-3']}`}>
+                      <label className={classes.label} htmlFor="name">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        className={`${classes['form-control']}`}
+                        placeholder="Enter Email Address"
+                        name="username"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className={`${classes['form-group']} ${classes['mb-3']}`}>
+                      <label className={classes.label} htmlFor="password">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        className={`${classes['form-control']}`}
+                        placeholder=" Enter Password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div  className={`${classes['form-group']}`}>
+                      <button
+                        type="submit"
+                        className={`${classes['btn']} ${classes['form-control']} ${classes['btn-primary']} ${classes['submit']} ${classes['px-3']}`}
+                      >
+                        Sign In
+                      </button>
+                    </div>
+                    <div className= {` ${classes['text-md-center']} ${classes['w-50']}`}>
+                      <a href="/sendotp" style={{ color: "#0101DF" }}>
+                        Forgot Password
+                      </a>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
 
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Button type='submit' variant='primary'>
-          Sign In
-        </Button>
-      </Form>
-
-      <Row className='py-3'>
-        <Col>
-          New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
-            Register
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
-  )
-}
-
-export default LoginScreen
+export default LoginScreen;

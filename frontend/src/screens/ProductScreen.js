@@ -5,7 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-// import Meta from '../components/Meta'
+import Meta from '../components/Meta'
 import {
   listProductDetails,
   createProductReview,
@@ -38,10 +38,10 @@ const ProductScreen = ({ history, match }) => {
       setComment('')
     }
     if (!product._id || product._id !== match.params.id) {
-      dispatch(listProductDetails(match.params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
+      dispatch(listProductDetails(match.params.id))
     }
-  }, [dispatch, match, product, successProductReview])
+  }, [dispatch, match, product._id, product.reviews, successProductReview])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -68,7 +68,7 @@ const ProductScreen = ({ history, match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          {/* <Meta title={product.name} /> */}
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

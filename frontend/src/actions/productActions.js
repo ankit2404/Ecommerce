@@ -18,40 +18,41 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAIL,
 } from "../constants/productConstant";
 
 import { logout } from "./userAction";
 
+export const listProducts =
+  (keyword = "", pageNumber = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_LIST_REQUEST });
 
-export const listProducts = (keyword = '', pageNumber = '') => async (
-  dispatch
-) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST })
+      const { data } = await axios.get(
+        `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
 
-    const { data } = await axios.get(
-      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
-    )
-
-    dispatch({
-      type: PRODUCT_LIST_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
-}
+      dispatch({
+        type: PRODUCT_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
-
     const { data } = await axios.get(`/api/products/${id}`);
 
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
@@ -193,6 +194,21 @@ export const createProductReview =
       dispatch({
         type: PRODUCT_CREATE_REVIEW_SUCCESS,
       });
+      
+      try {
+        dispatch({ type: PRODUCT_DETAILS_REQUEST });
+        const { data } = await axios.get(`/api/products/${productId}`);
+
+        dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
+      } catch (error) {
+        dispatch({
+          type: PRODUCT_DETAILS_FAIL,
+          payload:
+            error.respose && error.respose.data.message
+              ? error.respose.data.message
+              : error.message,
+        });
+      }
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -207,3 +223,24 @@ export const createProductReview =
       });
     }
   };
+
+  export const listTopProducts = () => async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_TOP_REQUEST })
+  
+      const { data } = await axios.get(`/api/products/top`)
+  
+      dispatch({
+        type: PRODUCT_TOP_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_TOP_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
+  }
