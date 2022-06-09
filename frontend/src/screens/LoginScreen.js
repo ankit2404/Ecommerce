@@ -57,7 +57,7 @@ const LoginScreen = ({ location, history }) => {
                 <div className={`${classes['login-wrap']} ${classes['p-4']} ${classes['p-lg-5']} `}>
                   <div className={`${classes['d-flex']}`}>
                     <div className={`${classes['w-100']}`}>
-                      <h2 className={`${classes['mb-4']}`}>Sign In</h2>
+                      <p style={{ fontSize : '1.5rem'}} className={`${classes['mb-4']}`}>SIGN IN</p>
                     </div>
                     <div className={`${classes['w-100']}`}>
                       <p className={ `${classes['d-flex']} ${classes['social-media']} ${classes['justify-content-end']}`}></p>

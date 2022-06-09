@@ -65,6 +65,13 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       email: user.email,
       name: user.name,
+      lastName: user.lastName,
+      gender: user.gender,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      dob: user.dob,
       isAdmin: user.isAdmin,
     });
   } else {
@@ -81,16 +88,31 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     user.name = req.body.name || user.name;
-    user.email = req.body.email || user.name;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
+    user.lastName = req.body.lastName || user.lastName;
+    user.gender = req.body.gender || user.gender;
+    user.phone = req.body.phone || user.phone;
+    user.address = req.body.address || user.address;
+    user.city = req.body.city || user.city;
+    user.country = req.body.country || user.country;
+    user.dob = req.body.dob || user.dob;
+    user.email = user.email;
+    // if (req.body.password) {
+    //   user.password = req.body.password;
+    // }
     const updatedUser = await user.save();
+    
 
     res.json({
       _id: updatedUser._id,
       email: updatedUser.email,
       name: updatedUser.name,
+      lastName: updatedUser.lastName,
+      gender: updatedUser.gender,
+      phone: updatedUser.phone,
+      address: updatedUser.address,
+      city: updatedUser.city,
+      country: updatedUser.country,
+      dob: updatedUser.dob,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id),
     });

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Container } from "react-bootstrap";
+// import { Container } from "react-bootstrap";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
@@ -18,13 +18,15 @@ import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import MyProfileScreen from "./screens/MyProfileScreen";
+import MyOrderList from "./screens/MyOrderList";
 
 const App = () => {
   return (
     <Router>
       <Header />
-      <main className="py-3">
-        <Container>
+      <main className="">
+        <>
           <Route path="/login" component={LoginScreen} />
           <Route path="/admin/userlist" component={UserListScreen} />
           <Route
@@ -50,13 +52,15 @@ const App = () => {
           <Route path="/cart/:id?" component={CartScreen} />
           <Route path="/search/:keyword" component={HomeScreen} exact />
           <Route path="/page/:pageNumber" component={HomeScreen} exact />
+          <Route path="/myprofile" component={MyProfileScreen} />
+          <Route path="/myorder" component={MyOrderList} />
           <Route
             path="/search/:keyword/page/:pageNumber"
             component={HomeScreen}
             exact
           />
           <Route path="/" component={HomeScreen} exact />
-        </Container>
+        </>
       </main>
       <Footer />
     </Router>

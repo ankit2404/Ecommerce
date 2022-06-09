@@ -67,7 +67,7 @@ const RegisterScreen = ({ location, history }) => {
                 >
                   <div className={`${classes["d-flex"]}`}>
                     <div className={`${classes["w-100"]}`}>
-                      <h2 >Sign Up</h2>
+                    <p style={{ fontSize : '1.5rem'}} >SIGN UP</p>
                     </div>
                     <div className={`${classes["w-100"]}`}>
                       <p
