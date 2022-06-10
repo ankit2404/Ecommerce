@@ -15,8 +15,8 @@ function MyOrderList() {
           </h1>
         </header>
 
-        <main className={`${classes["leaderboard__profiles"]}`}>
-          <article className={`${classes["leaderboard__profile"]}`}>
+        <div className={`${classes["leaderboard__profiles"]}`}>
+          {/* <article className={`${classes["leaderboard__profile"]}`}>
             <span>629cab26e2f96423d51af7b3	</span>
             <span className={`${classes["leaderboard__name"]}`}>
               2022-06-05
@@ -24,23 +24,128 @@ function MyOrderList() {
             <span className={`${classes["leaderboard__value"]}`}>
               35.7<span>B</span>
             </span>
+          </article> */}
+
+          <article
+            className={`${classes["leaderboard__profile"]} ${classes["div-flex"]}`}
+          >
+            <span className={`${classes["leaderboard__name"]}`}>
+              629cab26e2f96423d51af7b3
+            </span>
+            <span className={`${classes["leaderboard__name"]}`}>
+              2022-06-05
+            </span>
+            <span className={`${classes["leaderboard__name"]}`}>2299.94</span>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "15px",
+              }}
+            >
+              <button
+                className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                type="submit"
+                style={{ paddingLeft: "10%", paddingRight: "10%" }}
+              >
+                Details
+              </button>
+            </div>
           </article>
 
-          <article className={`${classes["leaderboard__profile"]}`}>
+          {/* <article
+            className={`${classes["leaderboard__profile"]} ${classes["div-flex"]}`}
+          >
+            <span className={`${classes["leaderboard__name"]}`}>
+              629cab26e2f96423d51af7b3
+            </span>
+            <span className={`${classes["leaderboard__name"]}`}>
+              2022-06-05
+            </span>
+            <span className={`${classes["leaderboard__name"]}`}>2299.94</span>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "15px",
+              }}
+            >
+              <button
+                className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                type="submit"
+                style={{ paddingLeft: "10%", paddingRight: "10%" }}
+              >
+                Details
+              </button>
+            </div>
+          </article>
+          <article
+            className={`${classes["leaderboard__profile"]} ${classes["div-flex"]}`}
+          >
+            <span className={`${classes["leaderboard__name"]}`}>
+              629cab26e2f96423d51af7b3
+            </span>
+          
+            <span className={`${classes["leaderboard__name"]}`}>
+              2022-06-05
+            </span>
+            <span className={`${classes["leaderboard__name"]}`}>2299.94</span>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "15px",
+              }}
+            >
+              <button
+                className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                type="submit"
+                style={{ paddingLeft: "10%", paddingRight: "10%" }}
+              >
+                Details
+              </button>
+            </div>
+          </article> */}
+
+          <article
+            className={`${classes["leaderboard__profile"]} ${classes["div-flex"]}`}
+          >
             <img
-              src="https://randomuser.me/api/portraits/men/97.jpg"
-              alt="Dustin Moskovitz"
+              src="https://randomuser.me/api/portraits/women/17.jpg"
+              alt="Elizabeth Holmes"
               className={`${classes["leaderboard__picture"]}`}
             />
             <span className={`${classes["leaderboard__name"]}`}>
-              Dustin Moskovitz
+              Pen Stand 
             </span>
-            <span className={`${classes["leaderboard__value"]}`}>
-              9.9<span>B</span>
+            <span className={`${classes["leaderboard__name"]}`}>
+              2022-06-05
             </span>
+            <span className={`${classes["leaderboard__name"]}`}>2299.94</span>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "15px",
+              }}
+            >
+              <button
+                className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                type="submit"
+                style={{ paddingLeft: "10%", paddingRight: "10%" }}
+              >
+                Details
+              </button>
+            </div>
           </article>
 
-          <article className={`${classes["leaderboard__profile"]}`}>
+          
+
+          {/* <article className={`${classes["leaderboard__profile"]}`}>
             <img
               src="https://randomuser.me/api/portraits/women/17.jpg"
               alt="Elizabeth Holmes"
@@ -66,8 +171,8 @@ function MyOrderList() {
             <span className={`${classes["leaderboard__value"]}`}>
               2.1<span>B</span>
             </span>
-          </article>
-        </main>
+          </article> */}
+        </div>
       </article>
     </div>
   );

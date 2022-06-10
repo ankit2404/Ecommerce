@@ -421,7 +421,7 @@ function MyProfileScreen({ location, history }) {
                       }}
                     >
                       <button
-                        className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                        className={`${classes["btn"]} ${classes["btn-primary"]}`}
                         type="submit"
                         style={{ paddingLeft: "5%", paddingRight: "5%" }}
                       >
