@@ -49,7 +49,7 @@
 .leaderboard__profiles {
     /* background-color: #fff; */
     border-radius: 0 0 12px 12px;
-    padding: 15px 30px 20px;
+    padding: 15px 10px;
     display: grid;
     row-gap: 8px;
     justify-content: inherit;
@@ -65,7 +65,7 @@
     cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.7, 0.98, 0.86, 0.98), box-shadow 0.25s cubic-bezier(0.7, 0.98, 0.86, 0.98);
     background-color: #fff;
-    max-height: 80px !important;
+    /* max-height: 80px !important; */
     margin-bottom: 10px;
     margin-top: 10px;
 }
@@ -75,9 +75,9 @@
 }
 .leaderboard__picture {
     max-width: 100%;
-    width: 60px;
+    width: 65px;
     border-radius: 50%;
-    box-shadow: 0 0 0 10px #ebeef3, 0 0 0 22px #f3f4f6;
+    box-shadow: 0 0 0 5px #ebeef3, 0 0 0 10px #f3f4f6;
 }
 .leaderboard__name {
     color: #979cb0;
@@ -144,3 +144,54 @@
     border-color: #5e72e4;
     background-color: #5e72e4;
   }
+  .specific{
+    margin-left: -25px;
+  }
+
+  .for-user{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    display: flex;
+  }
+  .user__name{
+    width: 25%;
+  }
+  .user__email{
+    width: 40%;
+  }
+  .user__admin{
+    width: 10%;
+  }
+
+  @media (max-width: 700px) {
+      .leaderboard__profile{
+        justify-content: space-between;
+          flex-wrap: wrap;
+          flex-flow: column;
+          width: 100%;
+          max-width: 45%;
+        }
+        .leaderboard__profiles{
+            flex-wrap: wrap;
+            display: flex;
+            justify-content: space-between;
+        }
+        .front{
+            display: none;
+        }
+        .user__name{
+            width: auto;
+          }
+          .user__email{
+            width: auto;
+          }
+          .user__admin{
+            width: auto;
+          }
+        
+    }
+    @media (max-width: 500px) {
+        .leaderboard__name{
+            font-size: 12px;
+        }
+    }
