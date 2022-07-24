@@ -100,7 +100,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     //   user.password = req.body.password;
     // }
     const updatedUser = await user.save();
-    
 
     res.json({
       _id: updatedUser._id,
@@ -151,7 +150,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
-  
+
   if (user) {
     res.json(user);
   } else {
@@ -185,6 +184,31 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// desc : update user profile
+// route : put /api/users/updatePassword
+// access : private
+
+const updateUserPassword = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user && (await user.matchPassword(req.body.password))) {
+    // user.name = user.name;
+    // user.lastName = user.lastName;
+    // user.gender = user.gender;
+    // user.phone = user.phone;
+    // user.address = user.address;
+    // user.city = user.city;
+    // user.country = user.country;
+    // user.dob = user.dob;
+    // user.email = user.email;
+    user.password = req.body.newPassword;
+    const updatedUser = await user.save();
+    res.json({ message: "Password Changed" });
+  } else {
+    res.status(401);
+    throw new Error("Incorrect password");
+  }
+});
+
 export {
   authUser,
   getUserProfile,
@@ -194,4 +218,5 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  updateUserPassword,
 };

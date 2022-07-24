@@ -128,7 +128,7 @@ function MyProfileScreen({ location, history }) {
                   <div
                     className={`${classes["h5 "]} ${classes["font-weight-300"]} `}
                   >
-                    {city} , {country}
+                    {city}  {country}
                   </div>
                 </div>
               </div>
@@ -192,12 +192,12 @@ function MyProfileScreen({ location, history }) {
                     >
                       Edit Profile
                     </button>
-                    <button
+                    <Link to = '/changepassword'
                       className={`${classes["btn"]} ${classes["btn-sm"]} ${classes["btn-primary"]}`}
                       id="change-pass"
                     >
                       Change Password
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

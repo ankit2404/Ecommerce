@@ -24,6 +24,9 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_UPDATE_PASSWORD_REQUEST,
+  USER_UPDATE_PASSWORD_SUCCESS,
+  USER_UPDATE_PASSWORD_FAIL,
 } from "../constants/userConstants";
 
 import { ORDER_LIST_MY_RESET } from "../constants/orderConstants";
@@ -161,6 +164,37 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
+      payload:
+        error.respose && error.respose.data.message
+          ? error.respose.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateUserPassword = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_PASSWORD_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.put("/api/users/changeMyPassword", user, config);
+
+    dispatch({ type: USER_UPDATE_PASSWORD_SUCCESS });
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_PASSWORD_FAIL,
       payload:
         error.respose && error.respose.data.message
           ? error.respose.data.message

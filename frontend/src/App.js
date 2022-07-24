@@ -20,6 +20,7 @@ import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
 import MyProfileScreen from "./screens/MyProfileScreen";
 import MyOrderList from "./screens/MyOrderList";
+import ChangePassword from "./screens/ChangePassword";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
           <Route path="/page/:pageNumber" component={HomeScreen} exact />
           <Route path="/myprofile" component={MyProfileScreen} />
           <Route path="/myorder" component={MyOrderList} />
+          <Route path="/changepassword" component={ChangePassword} />
           <Route
             path="/search/:keyword/page/:pageNumber"
             component={HomeScreen}
