@@ -10,7 +10,7 @@ function MyOrderList({ location, history }) {
   const dispatch = useDispatch();
 
   const userDetails = useSelector((state) => state.userDetails);
-  const { loading, error, user } = userDetails;
+  const { user } = userDetails;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -37,7 +37,7 @@ function MyOrderList({ location, history }) {
       {loadingOrders ? (
         <Loader />
       ) : errorOrders ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant="danger">{errorOrders}</Message>
       ) : (
         <div className={`${classes["myordercontainer"]}`}>
           <article className={`${classes["leaderboard"]}`}>

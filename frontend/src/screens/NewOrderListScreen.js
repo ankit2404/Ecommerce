@@ -1,38 +1,80 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listUsers, deleteUser } from "../actions/userAction";
-import classes from "../styles/myOrder.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import Paginate from "../components/Paginate";
+import {
+  listProducts,
+  deleteProduct,
+  createProduct,
+} from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../constants/productConstant";
+import classes from "../styles/productList.module.css";
 
-function OrderListScreen({ history }) {
+function ProductListScreen({ history, match }) {
+  const pageNumber = match.params.pageNumber || 1;
+
   const dispatch = useDispatch();
 
-  const userList = useSelector((state) => state.userList);
-  const { loading, error, users } = userList;
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products, page, pages } = productList;
+
+  const productDelete = useSelector((state) => state.productDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = productDelete;
+
+  const productCreate = useSelector((state) => state.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const userDelete = useSelector((state) => state.userDelete);
-  const { success: successDelete } = userDelete;
-
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listUsers());
-    } else {
+    dispatch({ type: PRODUCT_CREATE_RESET });
+
+    if (!userInfo || !userInfo.isAdmin) {
       history.push("/login");
     }
-  }, [dispatch, history, successDelete, userInfo]);
+
+    if (successCreate) {
+      history.push(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts("", pageNumber));
+    }
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+    pageNumber,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
-      dispatch(deleteUser(id));
+      dispatch(deleteProduct(id));
     }
+  };
+
+  const createProductHandler = () => {
+    dispatch(createProduct());
   };
   return (
     <>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -41,87 +83,93 @@ function OrderListScreen({ history }) {
         <div className={`${classes["myordercontainer"]}`}>
           <article className={`${classes["leaderboard"]}`}>
             <header>
-              <h1 className={`${classes["leaderboard__title"]}`}>
+              <h1 className={`${classes["leaderboard__title__new"]}`}>
                 <span className={`${classes["leaderboard__title--top"]}`}>
                   Myshop
                 </span>
                 <span className={`${classes["leaderboard__title--bottom"]}`}>
-                  Customer Orders
+                  All Products
                 </span>
               </h1>
+              <button
+                className={`${classes["btn"]}  ${classes["btn-primary"]} ${classes["leaderboard__title"]} ${classes["create__button"]}`}
+                onClick={createProductHandler}
+              >
+                <i className="fas fa-plus"></i> Create Product
+              </button>
             </header>
 
             <div className={`${classes["leaderboard__profiles"]} `}>
               <article
                 className={`${classes["leaderboard__profile"]}  ${classes["div-flex"]} ${classes["front"]}`}
               >
-                <span className={`${classes["leaderboard__name"]}`}>Name</span>
-                <span className={`${classes["leaderboard__name"]} `}>
-                  Order Date
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
+                  style={{ width: "40%" }}
+                >
+                  Product Name
                 </span>
-                <span className={`${classes["leaderboard__name"]}`}>Price</span>
-                <span className={`${classes["leaderboard__name"]}`}>
-                  Delivered
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
+                  style={{ width: "13%" }}
+                >
+                  Price
                 </span>
-                <span className={`${classes["leaderboard__name"]}`}>
-                  Details
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__admin"]}`}
+                  style={{ width: "20%" }}
+                >
+                  Brand
+                </span>
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__button_edit"]}`}
+                  style={{ paddingLeft: "20px" }}
+                >
+                  Edit
+                </span>
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__button"]}`}
+                  style={{ paddingLeft: "8%" }}
+                >
+                  Delete
                 </span>
               </article>
-              {users.length === 0 ? "No Orders" : ""}
-              {users.map((user) => (
+              {products.length === 0 ? "No Products" : ""}
+              {products.map((product) => (
                 <article
-                  key={user._id}
+                  key={product._id}
                   className={`${classes["leaderboard__profile"]} ${classes["for-user"]} `}
                 >
                   <span
                     className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
                   >
-                    {user.name}
+                    {product.name}
                   </span>
                   <span
                     className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
                   >
-                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                    ${product.price}
                   </span>
                   <span
                     className={`${classes["leaderboard__name"]} ${classes["user__admin"]}`}
                   >
-                    {user.isAdmin ? (
-                      <i
-                        className="fas fa-check"
-                        style={{ color: "green" }}
-                      ></i>
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
+                    {product.brand}
                   </span>
-                  {/* <span className={`${classes["leaderboard__name"]}`}>
-                    {user.isDelievered ? (
-                      user.delieveredAt.substring(0, 10)
-                    ) : (
-                      
-                      <p
-                        className={`${classes["leaderboard__name"]}`}
-                        style={{ color: "red", marginBottom: "0px" }}
+                  <div className={`${classes["user__button_edit"]}`}>
+                    <Link to={`/admin/product/${product._id}/edit`}>
+                      <button
+                        className={`${classes["btn"]}  ${classes["btn-primary"]}`}
+                        type="submit"
                       >
-                        Not Delivered
-                      </p>
-                    )}
-                  </span> */}
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      padding: "15px",
-                    }}
-                  >
-                    <Link to={`/admin/user/${user._id}/edit`}></Link>
+                        Edit
+                      </button>
+                    </Link>
+                  </div>
+                  <div className={`${classes["user__button"]}`}>
                     <button
-                      className={`${classes["btn"]} ${classes[""]} ${classes["btn-primary"]}`}
+                      className={`${classes["btn"]}  ${classes["btn-primary"]}`}
                       type="submit"
-                      style={{ paddingLeft: "10%", paddingRight: "10%" }}
-                      onClick={() => deleteHandler(user._id)}
+                      onClick={() => deleteHandler(product._id)}
                     >
                       Delete
                     </button>
@@ -132,8 +180,9 @@ function OrderListScreen({ history }) {
           </article>
         </div>
       )}
+      <Paginate pages={pages} page={page} isAdmin={true} />
     </>
   );
 }
 
-export default OrderListScreen;
+export default ProductListScreen;

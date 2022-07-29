@@ -22,7 +22,16 @@
     text-transform: uppercase;
     margin: 0;
 }
-.leaderboard header .leaderboard__title span {
+.leaderboard header .leaderboard__title__new {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: calc(var(--start) * 5.0);
+    transform: translateY(-50%);
+    text-transform: uppercase;
+    margin: 0;
+}
+.leaderboard header .leaderboard__title__new span {
     display: block;
 }
 .leaderboard header .leaderboard__title--top {
@@ -156,10 +165,10 @@
     display: flex;
   }
   .user__name{
-    width: 30%;
+    width: 60%;
   }
   .user__email{
-    width: 40%;
+    width: 20%;
   }
   .user__admin{
     width: 15%;
@@ -176,8 +185,18 @@
     padding-left: 10%;
     padding-right: 10%;
   }
+  .create__button:hover{
+    background-color: white;
+    color: #5e72e4;
+  }
 
-  @media (max-width: 700px) {
+
+  @media (max-width: 850px) {
+    .leaderboard header .leaderboard__title__new {
+        
+        right: calc(var(--start) * 4.5);
+        
+    }
       .leaderboard__profile{
         justify-content: space-between;
           flex-wrap: wrap;
@@ -195,6 +214,7 @@
         }
         .user__name{
             width: auto;
+            text-align: center;
           }
           .user__email{
             width: auto;
@@ -217,7 +237,12 @@
           }
         
     }
+    
+    
     @media (max-width: 600px) {
+        .leaderboard header .leaderboard__title__new{
+            right: calc(var(--start) * 4.2)
+         }
       .leaderboard__profiles{
         flex-wrap: wrap;
         display: flex;
@@ -235,4 +260,16 @@
         .leaderboard__name{
             font-size: 15px;
         }
+    }
+    
+    @media (max-width: 550px) {
+        .leaderboard header .leaderboard__title__new {
+            right: calc(var(--start) * 4)
+         }
+    }
+    @media (max-width: 500px) {
+        
+        .leaderboard header .leaderboard__title__new {
+            display: none;
+         }
     }
