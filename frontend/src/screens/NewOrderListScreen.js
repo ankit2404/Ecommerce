@@ -1,188 +1,114 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+// import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import Rating from "../components/Rating";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import Paginate from "../components/Paginate";
+import Meta from "../components/Meta";
 import {
-  listProducts,
-  deleteProduct,
-  createProduct,
+  listProductDetails,
+  createProductReview,
 } from "../actions/productActions";
-import { PRODUCT_CREATE_RESET } from "../constants/productConstant";
-import classes from "../styles/productList.module.css";
+import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstant";
+import classes from "../styles/productPage.module.css";
 
-function ProductListScreen({ history, match }) {
-  const pageNumber = match.params.pageNumber || 1;
+function CartScreen({ match, history }) {
+  const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const dispatch = useDispatch();
 
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products, page, pages } = productList;
-
-  const productDelete = useSelector((state) => state.productDelete);
-  const {
-    loading: loadingDelete,
-    error: errorDelete,
-    success: successDelete,
-  } = productDelete;
-
-  const productCreate = useSelector((state) => state.productCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdProduct,
-  } = productCreate;
+  const productDetails = useSelector((state) => state.productDetails);
+  const { loading, error, product } = productDetails;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const productReviewCreate = useSelector((state) => state.productReviewCreate);
+  const {
+    success: successProductReview,
+    loading: loadingProductReview,
+    error: errorProductReview,
+  } = productReviewCreate;
+
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    if (!userInfo || !userInfo.isAdmin) {
-      history.push("/login");
+    if (successProductReview) {
+      setRating(0);
+      setComment("");
     }
-
-    if (successCreate) {
-      history.push(`/admin/product/${createdProduct._id}/edit`);
+    if (!product._id || product._id !== match.params.id) {
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+      dispatch(listProductDetails(match.params.id));
     } else {
-      dispatch(listProducts("", pageNumber));
+      console.log(product);
     }
-  }, [
-    dispatch,
-    history,
-    userInfo,
-    successDelete,
-    successCreate,
-    createdProduct,
-    pageNumber,
-  ]);
+  }, [dispatch, match, product._id, product.reviews, successProductReview]);
 
-  const deleteHandler = (id) => {
-    if (window.confirm("Are you sure")) {
-      dispatch(deleteProduct(id));
-    }
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`);
   };
 
-  const createProductHandler = () => {
-    dispatch(createProduct());
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      createProductReview(match.params.id, {
+        rating,
+        comment,
+      })
+    );
   };
   return (
     <>
-      {loadingDelete && <Loader />}
-      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
-      {loadingCreate && <Loader />}
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
-        <div className={`${classes["myordercontainer"]}`}>
-          <article className={`${classes["leaderboard"]}`}>
-            <header>
-              <h1 className={`${classes["leaderboard__title__new"]}`}>
-                <span className={`${classes["leaderboard__title--top"]}`}>
-                  Myshop
-                </span>
-                <span className={`${classes["leaderboard__title--bottom"]}`}>
-                  All Products
-                </span>
-              </h1>
-              <button
-                className={`${classes["btn"]}  ${classes["btn-primary"]} ${classes["leaderboard__title"]} ${classes["create__button"]}`}
-                onClick={createProductHandler}
-              >
-                <i className="fas fa-plus"></i> Create Product
-              </button>
-            </header>
-
-            <div className={`${classes["leaderboard__profiles"]} `}>
-              <article
-                className={`${classes["leaderboard__profile"]}  ${classes["div-flex"]} ${classes["front"]}`}
-              >
-                <span
-                  className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
-                  style={{ width: "40%" }}
-                >
-                  Product Name
-                </span>
-                <span
-                  className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
-                  style={{ width: "13%" }}
-                >
-                  Price
-                </span>
-                <span
-                  className={`${classes["leaderboard__name"]} ${classes["user__admin"]}`}
-                  style={{ width: "20%" }}
-                >
-                  Brand
-                </span>
-                <span
-                  className={`${classes["leaderboard__name"]} ${classes["user__button_edit"]}`}
-                  style={{ paddingLeft: "20px" }}
-                >
-                  Edit
-                </span>
-                <span
-                  className={`${classes["leaderboard__name"]} ${classes["user__button"]}`}
-                  style={{ paddingLeft: "8%" }}
-                >
-                  Delete
-                </span>
-              </article>
-              {products.length === 0 ? "No Products" : ""}
-              {products.map((product) => (
-                <article
-                  key={product._id}
-                  className={`${classes["leaderboard__profile"]} ${classes["for-user"]} `}
-                >
-                  <span
-                    className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
-                  >
-                    {product.name}
-                  </span>
-                  <span
-                    className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
-                  >
-                    ${product.price}
-                  </span>
-                  <span
-                    className={`${classes["leaderboard__name"]} ${classes["user__admin"]}`}
-                  >
-                    {product.brand}
-                  </span>
-                  <div className={`${classes["user__button_edit"]}`}>
-                    <Link to={`/admin/product/${product._id}/edit`}>
-                      <button
-                        className={`${classes["btn"]}  ${classes["btn-primary"]}`}
-                        type="submit"
-                      >
-                        Edit
-                      </button>
-                    </Link>
-                  </div>
-                  <div className={`${classes["user__button"]}`}>
-                    <button
-                      className={`${classes["btn"]}  ${classes["btn-primary"]}`}
-                      type="submit"
-                      onClick={() => deleteHandler(product._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </article>
+      <Meta title={product.name} />
+      <main className={`${classes["container"]} `}>
+        <div className={`${classes["left-column"]} `}>
+          <img
+            data-image="red"
+            className={`${classes["active"]} `}
+            src={product.image}
+            alt={product.name}
+          />
         </div>
-      )}
-      <Paginate pages={pages} page={page} isAdmin={true} />
+
+        <div className={`${classes["right-column"]}`}>
+          <div className={`${classes["product-description"]} `}>
+            <span>{product.category}</span>
+            <h3>{product.name}</h3>
+            <p>{product.description}</p>
+          </div>
+
+          <div className={`${classes["product-configuration"]}`}>
+            <div className={`${classes["product-color"]}`}>
+              <span>Rating</span>
+              <Rating
+                value={product.rating}
+                text={`${product.numReviwes} reviews`}
+              />
+            </div>
+
+            <div className={`${classes["cable-config"]}`}>
+              <span>
+                {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+              </span>
+            </div>
+          </div>
+
+          <div className={`${classes["product-price"]}`}>
+            <span>${product.price}</span>
+            <button
+              disabled={product.countInStock === 0}
+              className={`${classes["cart-btn"]}`}
+              onClick={addToCartHandler}
+            >
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </main>
     </>
   );
 }
 
-export default ProductListScreen;
+export default CartScreen;

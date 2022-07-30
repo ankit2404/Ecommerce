@@ -1,19 +1,22 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
 const Loader = () => {
   return (
-    <Spinner
-      animation="border"
-      role="status"
-      style={{
-        width: "100px",
-        height: "100px",
-        margin: "auto",
-        display: "block",
-      }}
-    >
-        <span className="sr-only">Loading...</span>
-    </Spinner>
+    <>
+      <lottie-player
+        src="https://assets3.lottiefiles.com/packages/lf20_jyrxvzzj.json"
+        background="transparent"
+        speed="1"
+        style={{
+          width: "200px",
+          height: "200px",
+          margin: "auto",
+          display: "block",
+          marginTop: "10%",
+        }}
+        loop
+        autoplay
+      ></lottie-player>
+    </>
   );
 };
 
