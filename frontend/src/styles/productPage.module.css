@@ -6,7 +6,7 @@
     padding: 15px;
     display: flex;
     justify-content: flex-end;
-    align-items: baseline;
+    align-items: center;
   }
   
   /* Columns */
@@ -25,7 +25,7 @@
   /* Left Column */
   .left-column img {
     width: 90%;
-    position: absolute;
+    /* position: absolute; */
     left: 0;
     top: 0;
     opacity: 0;
@@ -114,6 +114,83 @@
     background-color: white;
     color: #5e72e4;
   }
+
+  /* Reviews */
+  .item{
+    min-width: 250px;
+    width: 23%;
+  }
+   .box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin: 35px 0;
+    text-align: center;
+    background-color: #5e72e4;
+    background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);
+    color: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+  }
+  
+   .box .img-box {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    position: relative;
+    border: 2px dashed #f0d43a;
+    border-radius: 100%;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+  
+   .box .img-box img {
+    width: 100%;
+    border-radius: 100%;
+  }
+  
+  .box .client_info .client_name h5 {
+    font-weight: bold;
+    margin-bottom: 0;
+    text-transform: uppercase;
+  }
+  
+   .box .client_info .client_name h6 {
+    color: #f0d43a;
+    font-weight: normal;
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+  
+   .box .client_info i {
+    font-size: 16px;
+  }
+  
+   .box p {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  
+   .review_box{
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    margin-left: 15px;
+    margin-right: 15px;
+   }
+   .review_header{
+    margin-left: 25px;
+    font-size: 22px;
+    padding-bottom: 0;
+   }
+  
   
   /* Responsive */
   @media (max-width: 830px) {
@@ -121,12 +198,23 @@
         width: 60%;
         position: relative;
       }
-      
+      .item{
+        min-width: 250px;
+        width: 30%;
+      }
   }
   @media (max-width: 750px) {
+    .review_box{
+      display: flex;
+      justify-content: space-evenly;
+      
+     }
     .container {
       flex-direction: column;
       /* margin-top: 50px; */
+    }
+    .item{
+      width: 45%;
     }
   
     .left-column,
@@ -146,6 +234,9 @@
     .left-column img {
       width: 220px;
       top: -85px;
+    }
+    .item{
+      width: 70%;
     }
   }
   

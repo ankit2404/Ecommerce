@@ -14,10 +14,9 @@ import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstant";
 import classes from "../styles/productPage.module.css";
 
 function CartScreen({ match, history }) {
-  const [qty, setQty] = useState(1);
+  // const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
@@ -41,12 +40,11 @@ function CartScreen({ match, history }) {
     if (!product._id || product._id !== match.params.id) {
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
       dispatch(listProductDetails(match.params.id));
-    } else {
-      console.log(product);
     }
   }, [dispatch, match, product._id, product.reviews, successProductReview]);
 
   const addToCartHandler = () => {
+    const qty = 1;
     history.push(`/cart/${match.params.id}?qty=${qty}`);
   };
 
@@ -61,52 +59,84 @@ function CartScreen({ match, history }) {
   };
   return (
     <>
-      <Meta title={product.name} />
-      <main className={`${classes["container"]} `}>
-        <div className={`${classes["left-column"]} `}>
-          <img
-            data-image="red"
-            className={`${classes["active"]} `}
-            src={product.image}
-            alt={product.name}
-          />
-        </div>
-
-        <div className={`${classes["right-column"]}`}>
-          <div className={`${classes["product-description"]} `}>
-            <span>{product.category}</span>
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-          </div>
-
-          <div className={`${classes["product-configuration"]}`}>
-            <div className={`${classes["product-color"]}`}>
-              <span>Rating</span>
-              <Rating
-                value={product.rating}
-                text={`${product.numReviwes} reviews`}
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <>
+          <Meta title={product.name} />
+          <main className={`${classes["container"]} `}>
+            <div className={`${classes["left-column"]} `}>
+              <img
+                data-image="red"
+                className={`${classes["active"]} `}
+                src={product.image}
+                alt={product.name}
               />
             </div>
+            <div className={`${classes["right-column"]}`}>
+              <div className={`${classes["product-description"]} `}>
+                <span>{product.category}</span>
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+              </div>
 
-            <div className={`${classes["cable-config"]}`}>
-              <span>
-                {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
-              </span>
+              <div className={`${classes["product-configuration"]} `}>
+                <div className={`${classes["product-color"]}`}>
+                  <span>Rating</span>
+                  <Rating
+                    value={product.rating}
+                    text={`${product.numReviwes} reviews`}
+                  />
+                </div>
+
+                <div className={`${classes["cable-config"]}`}>
+                  <span>
+                    {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                  </span>
+                </div>
+              </div>
+
+              <div className={`${classes["product-price"]}`}>
+                <span>${product.price}</span>
+                <button
+                  disabled={product.countInStock === 0}
+                  className={`${classes["cart-btn"]}`}
+                  onClick={addToCartHandler}
+                >
+                  Add to cart
+                </button>
+              </div>
             </div>
+          </main>
+          {product.reviews.length === 0 && <Message>No Reviews</Message>}
+          <h3 className={`${classes["review_header"]}`}>Reviews</h3>
+          <div className={`${classes["review_box"]}`}>
+            {product.reviews.map((review) => (
+              <div className={`${classes["item"]}`} key={review._id}>
+                <div className={`${classes["box"]}`}>
+                  <div className={`${classes["img-box"]}`}>
+                    <img
+                      src="https://cdn.statically.io/img/www.celebrities-contact.com//wp-content/uploads/2019/07/mackenzie-ziegler-email-phone-contact-732.jpg"
+                      alt=""
+                    />
+                  </div>
+                  <div className={`${classes["detail-box"]}`}>
+                    <div className={`${classes["client_info"]}`}>
+                      <div className={`${classes["client_name"]}`}>
+                        <h5 style={{ color: "white" }}>{review.name}</h5>
+                      </div>
+                      <Rating value={review.rating} />
+                    </div>
+                    <p>{review.comment}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-
-          <div className={`${classes["product-price"]}`}>
-            <span>${product.price}</span>
-            <button
-              disabled={product.countInStock === 0}
-              className={`${classes["cart-btn"]}`}
-              onClick={addToCartHandler}
-            >
-              Add to cart
-            </button>
-          </div>
-        </div>
-      </main>
+        </>
+      )}
     </>
   );
 }
