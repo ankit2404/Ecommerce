@@ -1,144 +1,221 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-// import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
-import Rating from "../components/Rating";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import Meta from "../components/Meta";
-import {
-  listProductDetails,
-  createProductReview,
-} from "../actions/productActions";
-import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstant";
-import classes from "../styles/productPage.module.css";
+import { listProductDetails, updateProduct } from "../actions/productActions";
+import { PRODUCT_UPDATE_RESET } from "../constants/productConstant";
+import classes from "../styles/productEdit.module.css";
 
-function CartScreen({ match, history }) {
-  // const [qty, setQty] = useState(1);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
+function ProductEditScreen({ match, history }) {
+  const productId = match.params.id;
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [image, setImage] = useState("");
+  const [brand, setBrand] = useState("");
+  const [category, setCategory] = useState("");
+  const [countInStock, setCountInStock] = useState(0);
+  const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
-  const productReviewCreate = useSelector((state) => state.productReviewCreate);
+  const productUpdate = useSelector((state) => state.productUpdate);
   const {
-    success: successProductReview,
-    loading: loadingProductReview,
-    error: errorProductReview,
-  } = productReviewCreate;
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = productUpdate;
 
   useEffect(() => {
-    if (successProductReview) {
-      setRating(0);
-      setComment("");
+    if (successUpdate) {
+      dispatch({ type: PRODUCT_UPDATE_RESET });
+      history.push("/admin/productlist");
+    } else {
+      if (!product.name || product._id !== productId) {
+        dispatch(listProductDetails(productId));
+      } else {
+        setName(product.name);
+        setPrice(product.price);
+        setImage(product.image);
+        setBrand(product.brand);
+        setCategory(product.category);
+        setCountInStock(product.countInStock);
+        setDescription(product.description);
+      }
     }
-    if (!product._id || product._id !== match.params.id) {
-      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
-      dispatch(listProductDetails(match.params.id));
-    }
-  }, [dispatch, match, product._id, product.reviews, successProductReview]);
+  }, [dispatch, history, productId, product, successUpdate]);
 
-  const addToCartHandler = () => {
-    const qty = 1;
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      createProductReview(match.params.id, {
-        rating,
-        comment,
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        description,
+        countInStock,
       })
     );
   };
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
-        <>
-          <Meta title={product.name} />
-          <main className={`${classes["container"]} `}>
-            <div className={`${classes["left-column"]} `}>
-              <img
-                data-image="red"
-                className={`${classes["active"]} `}
-                src={product.image}
-                alt={product.name}
-              />
-            </div>
-            <div className={`${classes["right-column"]}`}>
-              <div className={`${classes["product-description"]} `}>
-                <span>{product.category}</span>
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
-              </div>
-
-              <div className={`${classes["product-configuration"]} `}>
-                <div className={`${classes["product-color"]}`}>
-                  <span>Rating</span>
-                  <Rating
-                    value={product.rating}
-                    text={`${product.numReviwes} reviews`}
-                  />
-                </div>
-
-                <div className={`${classes["cable-config"]}`}>
-                  <span>
-                    {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
-                  </span>
-                </div>
-              </div>
-
-              <div className={`${classes["product-price"]}`}>
-                <span>${product.price}</span>
-                <button
-                  disabled={product.countInStock === 0}
-                  className={`${classes["cart-btn"]}`}
-                  onClick={addToCartHandler}
-                >
-                  Add to cart
-                </button>
-              </div>
-            </div>
-          </main>
-          {product.reviews.length === 0 && <Message>No Reviews</Message>}
-          <h3 className={`${classes["review_header"]}`}>Reviews</h3>
-          <div className={`${classes["review_box"]}`}>
-            {product.reviews.map((review) => (
-              <div className={`${classes["item"]}`} key={review._id}>
-                <div className={`${classes["box"]}`}>
-                  <div className={`${classes["img-box"]}`}>
-                    <img
-                      src="https://cdn.statically.io/img/www.celebrities-contact.com//wp-content/uploads/2019/07/mackenzie-ziegler-email-phone-contact-732.jpg"
-                      alt=""
+      <div className={`${classes["main_container"]}`}>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <div className={`${classes["review_container"]}`}>
+            <div className={`${classes["content"]}`}>
+              <h2 className={`${classes["review_header"]}`}>Edit Product</h2>
+              <div className={`${classes["user-details"]}`}>
+                <Form onSubmit={submitHandler}>
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="name"
+                  >
+                    <span className={`${classes["details"]}`}>Name</span>
+                    <input
+                      type="text"
+                      placeholder="Enter Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
-                  </div>
-                  <div className={`${classes["detail-box"]}`}>
-                    <div className={`${classes["client_info"]}`}>
-                      <div className={`${classes["client_name"]}`}>
-                        <h5 style={{ color: "white" }}>{review.name}</h5>
-                      </div>
-                      <Rating value={review.rating} />
-                    </div>
-                    <p>{review.comment}</p>
-                  </div>
-                </div>
+                  </Form.Group>
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="price"
+                  >
+                    <span className={`${classes["details"]}`}>Price</span>
+                    <input
+                      type="number"
+                      placeholder="Enter Price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="image"
+                  >
+                    <span className={`${classes["details"]}`}>Image</span>
+                    <input
+                      type="text"
+                      placeholder="Enter Imageurl"
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                    />
+                    <p className={`${classes["para_mid"]}`}>Or</p>
+                    <Form.File
+                      id="image-file"
+                      className={`${classes["custom-file-upload"]}`}
+                      // label="Choose File"
+                      custom
+                      onChange={uploadFileHandler}
+                    ></Form.File>
+                    {uploading && <Loader />}
+                  </Form.Group>
+
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="brand"
+                  >
+                    <span className={`${classes["details"]}`}>Brand</span>
+                    <input
+                      type="text"
+                      placeholder="Enter brand"
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="countInStock"
+                  >
+                    <span className={`${classes["details"]}`}>
+                      Count In Stock
+                    </span>
+                    <input
+                      type="number"
+                      placeholder="Enter countInStock"
+                      value={countInStock}
+                      onChange={(e) => setCountInStock(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="category"
+                  >
+                    <span className={`${classes["details"]}`}>Category</span>
+                    <input
+                      type="text"
+                      placeholder="Enter category"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group
+                    className={`${classes["input-box"]}`}
+                    controlId="description"
+                  >
+                    <span className={`${classes["details"]}`}>Description</span>
+                    <input
+                      type="text"
+                      placeholder="Enter description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <button className={`${classes["cart-btn"]}`} type="submit">
+                    Update
+                  </button>
+                </Form>
               </div>
-            ))}
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </>
   );
 }
 
-export default CartScreen;
+export default ProductEditScreen;

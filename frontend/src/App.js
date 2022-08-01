@@ -56,7 +56,10 @@ const App = () => {
           <Route path="/page/:pageNumber" component={HomeScreen} exact />
           <Route path="/myprofile" component={MyProfileScreen} />
           <Route path="/myorder" component={MyOrderList} />
-          <Route path="/newOrder/:id" component={NewOrderListScreen} />
+          <Route
+            path="/admin/productnew/:id/edit"
+            component={NewOrderListScreen}
+          />
           <Route path="/changepassword" component={ChangePassword} />
           <Route
             path="/search/:keyword/page/:pageNumber"
