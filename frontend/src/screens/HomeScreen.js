@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 import Product from "../components/Product";
-import { Row, Col } from "react-bootstrap";
 import { listProducts } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
-import ProductCarousel from '../components/ProductCarousel'
-import Meta from '../components/Meta'
+import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
+import classes from "../styles/home.module.css";
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
@@ -23,35 +23,49 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
-    <Meta />
-    {!keyword ? (
+      <Meta />
+      {!keyword ? (
         <ProductCarousel />
       ) : (
-        <Link to='/' className='btn btn-light'>
+        <Link to="/" className="btn btn-light">
           Go Back
         </Link>
       )}
-      <h1>Latest Products</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
-        <>
-          <Row>
-            {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            keyword={keyword ? keyword : ""}
-          />
-        </>
-      )}
+
+      <div className={`${classes["hero_area"]}`}>
+        <section
+          className={`${classes["shop_section"]} ${classes["layout_padding"]}`}
+        >
+          <div className={`${classes["container"]}`}>
+            <div
+              className={`${classes["heading_container"]} ${classes["heading_center"]}`}
+            >
+              <h2>Latest Products</h2>
+            </div>
+            <div className={`${classes["main_div"]}`}>
+              {loading ? (
+                <Loader />
+              ) : error ? (
+                <Message variant="danger">{error}</Message>
+              ) : (
+                <>
+                  {products.map((product) => (
+                    <div key={product._id} className={`${classes["row"]}`}>
+                      <Product product={product} />
+                    </div>
+                  ))}
+
+                  <Paginate
+                    pages={pages}
+                    page={page}
+                    keyword={keyword ? keyword : ""}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 };

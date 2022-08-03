@@ -1,31 +1,39 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import classes from "../styles/home.module.css";
 import Rating from "./Rating";
 const Product = ({ product }) => {
   return (
-    <Card className="p-3 my-3 rounded">
-      <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant="top" />
-      </Link>
-
-      <Card.Body>
+    <div className={`${classes["single_card"]}`}>
+      <div className={`${classes["box"]}`}>
+        <div className={`${classes["img-box"]}`}>
+          <Link to={`/product/${product._id}`}>
+            <img
+              src={product.image}
+              alt={product.name}
+              style={{ borderRadius: "10px" }}
+            />
+          </Link>
+        </div>
         <Link to={`/product/${product._id}`} id="prod_name">
-          <Card.Title as="div">
-            <strong id="prod_name">{product.name}</strong>
-          </Card.Title>
+          <h2 className={`${classes["review_header"]}`}>{product.name}</h2>
         </Link>
-
-        <Card.Text as="div">
+        <div className={`${classes["detail-box"]}`}>
           <Rating
             value={product.rating}
             text={`${product.numReviwes} reviews`}
           />
-        </Card.Text>
-
-        <Card.Text as="h3">${product.price}</Card.Text>
-      </Card.Body>
-    </Card>
+          <p className={`${classes["price-para"]}`}>
+            Price:
+            <span>${product.price}</span>
+          </p>
+        </div>
+        <div className={`${classes["new"]}`}>
+          <span>Featured</span>
+        </div>
+      </div>
+    </div>
+    // </div>
   );
 };
 
