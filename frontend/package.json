@@ -21,7 +21,13 @@
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "sass": "^1.54.2",
+    "swiper": "^6.0.2",
     "web-vitals": "^1.0.1"
+  },
+  "exports": {
+    "./css": "./swiper.min.css",
+    "./css/bundle": "./swiper-bundle.min.css"
   },
   "scripts": {
     "start": "react-scripts start",

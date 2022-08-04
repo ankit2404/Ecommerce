@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
+import { forget_mailer } from "../mailer/user_mailer.js";
+import crypto from "crypto";
 
 // desc : aut users and get token
 // route : Post /api/users/login
@@ -209,6 +211,111 @@ const updateUserPassword = asyncHandler(async (req, res) => {
   }
 });
 
+const forgot_password = asyncHandler(async (req, res) => {
+  try {
+    console.log(req.body.email);
+    let key = crypto.randomBytes(20).toString("hex");
+    let user = await User.findOne({ email: req.body.email });
+    console.log(user);
+    if (user) {
+      user.auth_key = key;
+      user.save();
+      forget_mailer(user, key);
+    } else {
+      console.log(`user not exists`);
+      return res.redirect("/");
+    }
+
+    return res.redirect("/user/sign-in");
+  } catch (error) {
+    console.log(error);
+    console.log("error", `Internal Server error : ${error}`);
+    return res.redirect("back");
+  }
+});
+
+const forgot_password_reset_recive = asyncHandler(async (req, res) => {
+  try {
+    console.log(`entered in forgot pass reset recive`);
+    let user = await User.findById(req.query.userid);
+    console.log(
+      `auth key link ${req.query.authkey} auth key real ${user.auth_key} `
+    );
+    console.log(
+      `user key link ${req.query.userid} user key real ${user.auth_key} `
+    );
+
+    if (user && user.auth_key == req.query.authkey) {
+      //change auth key and send to password redirect page
+      return res.render("password_reset_forgot", {
+        user: user.id,
+        auth_key: user.auth_key,
+        keyword: "",
+      });
+    } else {
+      //noty needed
+      console.log("user not exist or authkey expired");
+      console.log("error", "user not exist or authkey expired please retry");
+      res.redirect("back");
+    }
+  } catch (error) {
+    console.log(error);
+    console.log("error", `Internal Server error : ${error}`);
+    return res.redirect("back");
+  }
+});
+
+const reset_pass_req = asyncHandler(async (req, res) => {
+  try {
+    //reset the password and update the auth key
+    console.log(req.body);
+    //check user id and auth key
+    if (req.body.password == req.body["cn-password"]) {
+      if (req.body["user-id"] && req.body["auth_key"]) {
+        let user = await User.findById(req.body["user-id"]);
+
+        if (user && user.auth_key == req.body["auth_key"]) {
+          await User.findByIdAndUpdate(req.body["user-id"], {
+            password: req.body["password"],
+            auth_key: crypto.randomBytes(20).toString("hex"),
+          });
+          console.log("password updated");
+          console.log(
+            "sucess",
+            "user password updated please Login with new credentials"
+          );
+        } else {
+          console.log(`unautharised request`);
+          console.log(
+            "error",
+            "user not exist or authkey expired please retry"
+          );
+          return res.redirect("back");
+        }
+      } else {
+        console.log(`unautharised request`);
+        console.log("error", "user not exist or authkey expired please retry");
+        return res.redirect("back");
+      }
+    } else {
+      console.log(`password and confirm password did not match`);
+      console.log("error", "password and confirm password did not match retry");
+      return res.redirect("back");
+    }
+
+    return res.redirect("/user/sign-in");
+  } catch (error) {
+    console.log(error);
+    console.log("error", `Internal Server error : ${error}`);
+    return res.redirect("back");
+  }
+});
+const forget_pass_page = asyncHandler(async (req, res) => {
+  return res.render("forgot_pass", {
+    keyword: "",
+  });
+});
+
 export {
   authUser,
   getUserProfile,
@@ -219,4 +326,8 @@ export {
   getUserById,
   updateUser,
   updateUserPassword,
+  forget_pass_page,
+  reset_pass_req,
+  forgot_password_reset_recive,
+  forgot_password,
 };

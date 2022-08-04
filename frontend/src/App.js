@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 // import { Container } from "react-bootstrap";
+// import "swiper/css/bundle";
+import "swiper/swiper-bundle.css";
+// import "swiper/swiper-bundle.min.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
@@ -21,7 +24,7 @@ import OrderListScreen from "./screens/OrderListScreen";
 import MyProfileScreen from "./screens/MyProfileScreen";
 import MyOrderList from "./screens/MyOrderList";
 import ChangePassword from "./screens/ChangePassword";
-import newHomeScreen from "./screens/NewHomeScreen";
+import newHomeScreen from "./screens/NewHomeScreen.jsx";
 import NewOrderListScreen from "./screens/NewOrderListScreen";
 const App = () => {
   return (

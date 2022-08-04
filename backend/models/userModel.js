@@ -42,6 +42,9 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    auth_key: {
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -49,7 +52,7 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  console.log(enteredPassword)
+  console.log(enteredPassword);
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

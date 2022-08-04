@@ -449,6 +449,7 @@ a:focus {
       -ms-flex-align: center;
           align-items: center;
   font-size: 15px;
+  border-radius: 3px;
 }
 
 .shop_section .btn-box {
