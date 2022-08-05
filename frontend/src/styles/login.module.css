@@ -7267,6 +7267,7 @@ body {
     background: linear-gradient(135deg, #002D62 0%, #5E72E4 100%);
     background: linear-gradient(135deg, #002D62 0%, #0101DF 100%);
     background: linear-gradient(130deg, #040849 0%, #0040FF 100%);
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#598a31', endColorstr='#bad900', GradientType=1 );
     color: #fff; }
     .text-wrap .text h2 {
@@ -7428,7 +7429,8 @@ body {
       background: linear-gradient(135deg, #598a31 0%, #bad900 100%); */
       background: linear-gradient(135deg, #002D62 0%, #5E72E4 100%);
       background: linear-gradient(135deg, #002D62 0%, #0101DF 100%);
-      background: linear-gradient(130deg, #040849 0%, #0040FF 100%);
+      background: linear-gradient(130deg, #040849 10%, #0040FF 100%);
+      /* background: linear-gradient(87deg, #172b4d 100%, #1a174d 0) !important; */
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#598a31', endColorstr='#bad900', GradientType=1 ); }
       .btn.btn-primary:hover {
         border: 1px solid #bad900;

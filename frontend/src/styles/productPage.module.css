@@ -136,6 +136,7 @@
     text-align: center;
     background-color: #5e72e4;
     background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important;
     color: #ffffff;
     border-radius: 15px;
     padding: 25px;

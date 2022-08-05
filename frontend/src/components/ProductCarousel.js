@@ -24,7 +24,7 @@ const ProductCarousel = () => {
   ) : error ? (
     <Message variant="danger">{error}</Message>
   ) : (
-    <div className={`${classes["main_div"]}`}>
+    <div className={`${classes["main_div"]}`} style={{ marginTop: "10px" }}>
       <Swiper
         spaceBetween={30}
         centeredSlides={true}

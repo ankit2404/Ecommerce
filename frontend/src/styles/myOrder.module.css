@@ -8,6 +8,7 @@
     height: 100px;
     /* background-image: repeating-radial-gradient(circle at var(--start), transparent 0%, transparent 10%, rgba(54, 89, 219, .33) 10%, rgba(54, 89, 219, .33) 17%), linear-gradient(to right, #5b7cfa, #3659db); */
     background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important;
     color: #fff;
     position: relative;
     border-radius: 12px 12px 0 0;

@@ -437,7 +437,8 @@ a:focus {
   position: absolute;
   top: 0;
   left: 0;
-  background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);;
+  background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);
+  background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important;
   color: #ffffff;
   display: -webkit-box;
   display: -ms-flexbox;
