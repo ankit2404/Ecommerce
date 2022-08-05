@@ -6,7 +6,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { login } from "../actions/userAction";
 // import "../styles/login.css";
-import classes from "../styles/login.module.css"
+import classes from "../styles/login.module.css";
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,14 +33,26 @@ const LoginScreen = ({ location, history }) => {
     <div>
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
-      <section className={classes['ftco-section']}>
+      <section className={classes["ftco-section"]}>
         <div className={classes.container}>
-          <div className={`${classes.row} ${classes['justify-content-center']}`}>
-            <div className={`${classes["col-md-12"]} ${classes['col-lg-10']}`}>
+          <div
+            className={`${classes.row} ${classes["justify-content-center"]}`}
+          >
+            <div className={`${classes["col-md-12"]} ${classes["col-lg-10"]}`}>
               <div className={`${classes.wrap} ${classes["d-md-flex"]}`}>
-                <div className={`${classes['text-wrap']} ${classes['p-4']} ${classes['p-lg-5']} ${classes['text-center']} ${classes['d-flex']} ${classes['align-items-center']} ${classes['order-md-last']}`}>
-                  <div className={`${classes['text']} ${classes['w-100']}`}>
-                    <p style={{color : '#ffffff', fontSize : '1.8rem' , fontWeight : "bold"}}>Welcome to AngelShop</p>
+                <div
+                  className={`${classes["text-wrap"]} ${classes["p-4"]} ${classes["p-lg-5"]} ${classes["text-center"]} ${classes["d-flex"]} ${classes["align-items-center"]} ${classes["order-md-last"]}`}
+                >
+                  <div className={`${classes["text"]} ${classes["w-100"]}`}>
+                    <p
+                      style={{
+                        color: "#ffffff",
+                        fontSize: "1.8rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Welcome to AngelShop
+                    </p>
                     <p>Don't have an account?</p>
                     <Link
                       to={
@@ -48,29 +60,40 @@ const LoginScreen = ({ location, history }) => {
                           ? `/register?redirect=${redirect}`
                           : "/register"
                       }
-                      className={`${classes['btn']} ${classes['btn-white']} ${classes['btn-outline-white']}`}
+                      className={`${classes["btn"]} ${classes["btn-white"]} ${classes["btn-outline-white"]}`}
                     >
                       Sign Up
                     </Link>
                   </div>
                 </div>
-                <div className={`${classes['login-wrap']} ${classes['p-4']} ${classes['p-lg-5']} `}>
-                  <div className={`${classes['d-flex']}`}>
-                    <div className={`${classes['w-100']}`}>
-                      <p style={{ fontSize : '1.5rem'}} className={`${classes['mb-4']}`}>SIGN IN</p>
+                <div
+                  className={`${classes["login-wrap"]} ${classes["p-4"]} ${classes["p-lg-5"]} `}
+                >
+                  <div className={`${classes["d-flex"]}`}>
+                    <div className={`${classes["w-100"]}`}>
+                      <p
+                        style={{ fontSize: "1.5rem" }}
+                        className={`${classes["mb-4"]}`}
+                      >
+                        SIGN IN
+                      </p>
                     </div>
-                    <div className={`${classes['w-100']}`}>
-                      <p className={ `${classes['d-flex']} ${classes['social-media']} ${classes['justify-content-end']}`}></p>
+                    <div className={`${classes["w-100"]}`}>
+                      <p
+                        className={`${classes["d-flex"]} ${classes["social-media"]} ${classes["justify-content-end"]}`}
+                      ></p>
                     </div>
                   </div>
                   <Form onSubmit={submitHandler}>
-                    <div className={`${classes['form-group']} ${classes['mb-3']}`}>
+                    <div
+                      className={`${classes["form-group"]} ${classes["mb-3"]}`}
+                    >
                       <label className={classes.label} htmlFor="name">
                         Email
                       </label>
                       <input
                         type="email"
-                        className={`${classes['form-control']}`}
+                        className={`${classes["form-control"]}`}
                         placeholder="Enter Email Address"
                         name="username"
                         value={email}
@@ -78,13 +101,15 @@ const LoginScreen = ({ location, history }) => {
                         required
                       />
                     </div>
-                    <div className={`${classes['form-group']} ${classes['mb-3']}`}>
+                    <div
+                      className={`${classes["form-group"]} ${classes["mb-3"]}`}
+                    >
                       <label className={classes.label} htmlFor="password">
                         Password
                       </label>
                       <input
                         type="password"
-                        className={`${classes['form-control']}`}
+                        className={`${classes["form-control"]}`}
                         placeholder=" Enter Password"
                         name="password"
                         value={password}
@@ -92,18 +117,20 @@ const LoginScreen = ({ location, history }) => {
                         required
                       />
                     </div>
-                    <div  className={`${classes['form-group']}`}>
+                    <div className={`${classes["form-group"]}`}>
                       <button
                         type="submit"
-                        className={`${classes['btn']} ${classes['form-control']} ${classes['btn-primary']} ${classes['submit']} ${classes['px-3']}`}
+                        className={`${classes["btn"]} ${classes["form-control"]} ${classes["btn-primary"]} ${classes["submit"]} ${classes["px-3"]}`}
                       >
                         Sign In
                       </button>
                     </div>
-                    <div className= {` ${classes['text-md-center']} ${classes['w-50']}`}>
-                      <a href="/sendotp" style={{ color: "#0101DF" }}>
+                    <div
+                      className={` ${classes["text-md-center"]} ${classes["w-50"]}`}
+                    >
+                      <Link to="/forgetPassword" style={{ color: "#0101DF" }}>
                         Forgot Password
-                      </a>
+                      </Link>
                     </div>
                   </Form>
                 </div>

@@ -26,6 +26,8 @@ import MyOrderList from "./screens/MyOrderList";
 import ChangePassword from "./screens/ChangePassword";
 import newHomeScreen from "./screens/NewHomeScreen.jsx";
 import NewOrderListScreen from "./screens/NewOrderListScreen";
+import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
+import ChangeForgetPassword from "./screens/ChangeForgetPassword";
 const App = () => {
   return (
     <Router>
@@ -45,6 +47,16 @@ const App = () => {
             exact
           />
           <Route path="/admin/orderlist" component={OrderListScreen} />
+          <Route
+            path="/forgetPassword"
+            component={ForgetPasswordScreen}
+            exact
+          />
+          <Route
+            path="/forgetPassword/reset/:authkey/:userid"
+            component={ChangeForgetPassword}
+            exact
+          />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
           <Route path="/admin/product/:id/edit" component={ProductEditScreen} />
           <Route path="/order/:id" component={OrderScreen} />

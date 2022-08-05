@@ -1,36 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
-import { login } from "../actions/userAction";
+import axios from "axios";
 import classes from "../styles/login.module.css";
-const LoginScreen = ({ location, history }) => {
+const ForgetPasswordScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
-
-  const dispatch = useDispatch();
-
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
-
-  const redirect = location.search ? location.search.split("=")[1] : "/";
-
-  useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [history, userInfo, redirect]);
-
-  const submitHandler = (e) => {
+  const [mess, setMess] = useState("");
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(login(email));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "/api/users/forgot-pass",
+      { email },
+      config
+    );
+    console.log({ data });
+    setEmail("");
+    setMess(data);
   };
 
   return (
     <div>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>
           <div
@@ -53,11 +48,7 @@ const LoginScreen = ({ location, history }) => {
                     </p>
                     <p>Don't have an account?</p>
                     <Link
-                      to={
-                        redirect
-                          ? `/register?redirect=${redirect}`
-                          : "/register"
-                      }
+                      to="/register"
                       className={`${classes["btn"]} ${classes["btn-white"]} ${classes["btn-outline-white"]}`}
                     >
                       Sign Up
@@ -109,6 +100,7 @@ const LoginScreen = ({ location, history }) => {
                       </button>
                     </div>
                   </Form>
+                  <p>{mess}</p>
                 </div>
               </div>
             </div>
@@ -119,4 +111,4 @@ const LoginScreen = ({ location, history }) => {
   );
 };
 
-export default LoginScreen;
+export default ForgetPasswordScreen;
