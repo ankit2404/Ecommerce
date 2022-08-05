@@ -1,0 +1,18 @@
+body {
+    font-family: "Poppins", sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+.main_container{
+    background: linear-gradient(130deg, #0b13a7 0%, #0040FF 100%);
+}
+.head_text{
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 15px;
+    /* margin-top: 10px; */
+}
+.text{
+    color: #ffffff;
+}

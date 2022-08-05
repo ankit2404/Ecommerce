@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { register } from "../actions/userAction";
+import { toast } from "react-toastify";
 import classes from "../styles/login.module.css";
 
 const RegisterScreen = ({ location, history }) => {
@@ -12,7 +12,6 @@ const RegisterScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -23,14 +22,19 @@ const RegisterScreen = ({ location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
+      toast.success("Registration Successful");
       history.push(redirect);
+    } else if (error) {
+      toast.error("Something went wrong");
     }
-  }, [history, userInfo, redirect]);
+  }, [history, userInfo, redirect, error]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
+      toast.info("Passwords do not match");
+      setPassword("");
+      setConfirmPassword("");
     } else {
       dispatch(register(name, email, password));
     }
@@ -38,8 +42,6 @@ const RegisterScreen = ({ location, history }) => {
 
   return (
     <div>
-      {error && <Message variant="danger">{error}</Message>}
-      {message && <Message variant='danger'>{message}</Message>}
       {loading && <Loader />}
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>
@@ -47,12 +49,23 @@ const RegisterScreen = ({ location, history }) => {
             className={`${classes.row} ${classes["justify-content-center"]}`}
           >
             <div className={`${classes["col-md-12"]} ${classes["col-lg-10"]}`}>
-              <div className={`${classes.wrap} ${classes["d-md-flex"]}`} style = {{flexDirection: 'row-reverse'}}>
+              <div
+                className={`${classes.wrap} ${classes["d-md-flex"]}`}
+                style={{ flexDirection: "row-reverse" }}
+              >
                 <div
                   className={`${classes["text-wrap"]} ${classes["p-4"]} ${classes["p-lg-5"]} ${classes["text-center"]} ${classes["d-flex"]} ${classes["align-items-center"]} ${classes["order-md-last"]}`}
                 >
                   <div className={`${classes["text"]} ${classes["w-100"]}`}>
-                    <p style={{color : '#ffffff', fontSize : '1.8rem' , fontWeight : "bold"}}>Welcome to AngelShop</p>
+                    <p
+                      style={{
+                        color: "#ffffff",
+                        fontSize: "1.8rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Welcome to AngelShop
+                    </p>
                     <p>Already have an account?</p>
                     <Link
                       to={redirect ? `/login?redirect=${redirect}` : "/login"}
@@ -67,7 +80,7 @@ const RegisterScreen = ({ location, history }) => {
                 >
                   <div className={`${classes["d-flex"]}`}>
                     <div className={`${classes["w-100"]}`}>
-                    <p style={{ fontSize : '1.5rem'}} >SIGN UP</p>
+                      <p style={{ fontSize: "1.5rem" }}>SIGN UP</p>
                     </div>
                     <div className={`${classes["w-100"]}`}>
                       <p

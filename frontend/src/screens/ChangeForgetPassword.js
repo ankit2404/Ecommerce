@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
-// import Message from "../components/Message";
+import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import axios from "axios";
 import classes from "../styles/login.module.css";
@@ -11,13 +11,6 @@ const ChangeForgetPassword = ({ match, history }) => {
   const [authkey, setAuthKey] = useState("");
   const [userid, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
-
-  //   const dispatch = useDispatch();
-
-  //   const userLogin = useSelector((state) => state.userLogin);
-  //   const { loading, error, userInfo } = userLogin;
-
-  //   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
     setAuthKey(match.params.authkey);
@@ -41,12 +34,16 @@ const ChangeForgetPassword = ({ match, history }) => {
       );
 
       if (data === "Password changed Successfully") {
+        toast.success("Password changed successfully");
         history.push("/login");
       } else {
+        toast.error("Something went wrong");
         setLoading(false);
       }
     } else {
-      console.log("error");
+      toast.error("Enter password again");
+      setConfirmPassword("");
+      setPassword("");
     }
   };
 

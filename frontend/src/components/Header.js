@@ -1,10 +1,12 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import SearchBox from "./SearchBox";
 import { logout } from "../actions/userAction";
+import classes from "../styles/header.module.css";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,18 +17,20 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+    <header className={`${classes["main_container"]}`}>
+      <Navbar expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>My Shop</Navbar.Brand>
+            <Navbar.Brand className={`${classes["text"]}`}>
+              My Shop
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className="ms-auto">
               <LinkContainer to="/cart">
-                <Nav.Link>
+                <Nav.Link className={`${classes["text"]}`}>
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Nav.Link>
               </LinkContainer>

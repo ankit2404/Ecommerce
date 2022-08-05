@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { login } from "../actions/userAction";
-// import "../styles/login.css";
+import { toast } from "react-toastify";
 import classes from "../styles/login.module.css";
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
@@ -20,9 +19,12 @@ const LoginScreen = ({ location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
+      toast.success("Login Successful");
       history.push(redirect);
+    } else if (error) {
+      toast.error("Enter Password Again");
     }
-  }, [history, userInfo, redirect]);
+  }, [history, userInfo, redirect, error]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -31,7 +33,6 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <div>
-      {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>

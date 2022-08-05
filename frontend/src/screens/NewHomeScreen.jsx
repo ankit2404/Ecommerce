@@ -1,122 +1,69 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Form } from "react-bootstrap";
+import React from "react";
+import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
-import { login } from "../actions/userAction";
-import classes from "../styles/login.module.css";
-const LoginScreen = ({ location, history }) => {
-  const [email, setEmail] = useState("");
-
+import { LinkContainer } from "react-router-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import SearchBox from "../components/SearchBox";
+import { logout } from "../actions/userAction";
+import classes from "../styles/header.module.css";
+const NewHomeScreen = () => {
   const dispatch = useDispatch();
-
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
-
-  const redirect = location.search ? location.search.split("=")[1] : "/";
-
-  useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [history, userInfo, redirect]);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(login(email));
+  const { userInfo } = userLogin;
+  const logoutHandler = () => {
+    dispatch(logout());
   };
-
   return (
-    <div>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
-      <section className={classes["ftco-section"]}>
-        <div className={classes.container}>
-          <div
-            className={`${classes.row} ${classes["justify-content-center"]}`}
-          >
-            <div className={`${classes["col-md-12"]} ${classes["col-lg-10"]}`}>
-              <div className={`${classes.wrap} ${classes["d-md-flex"]}`}>
-                <div
-                  className={`${classes["text-wrap"]} ${classes["p-4"]} ${classes["p-lg-5"]} ${classes["text-center"]} ${classes["d-flex"]} ${classes["align-items-center"]} ${classes["order-md-last"]}`}
-                >
-                  <div className={`${classes["text"]} ${classes["w-100"]}`}>
-                    <p
-                      style={{
-                        color: "#ffffff",
-                        fontSize: "1.8rem",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Welcome to AngelShop
-                    </p>
-                    <p>Don't have an account?</p>
-                    <Link
-                      to={
-                        redirect
-                          ? `/register?redirect=${redirect}`
-                          : "/register"
-                      }
-                      className={`${classes["btn"]} ${classes["btn-white"]} ${classes["btn-outline-white"]}`}
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                </div>
-                <div
-                  className={`${classes["login-wrap"]} ${classes["p-4"]} ${classes["p-lg-5"]} `}
-                >
-                  <div className={`${classes["d-flex"]}`}>
-                    <div className={`${classes["w-100"]}`}>
-                      <p
-                        style={{ fontSize: "1rem" }}
-                        className={`${classes["mb-4"]}`}
-                      >
-                        Forget Password
-                      </p>
-                    </div>
-                    <div className={`${classes["w-100"]}`}>
-                      <p
-                        className={`${classes["d-flex"]} ${classes["social-media"]} ${classes["justify-content-end"]}`}
-                      ></p>
-                    </div>
-                  </div>
-                  <Form onSubmit={submitHandler}>
-                    <div
-                      className={`${classes["form-group"]} ${classes["mb-3"]}`}
-                    >
-                      <label className={classes.label} htmlFor="name">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className={`${classes["form-control"]}`}
-                        placeholder="Enter Email Address"
-                        name="username"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className={`${classes["form-group"]}`}>
-                      <button
-                        type="submit"
-                        className={`${classes["btn"]} ${classes["form-control"]} ${classes["btn-primary"]} ${classes["submit"]} ${classes["px-3"]}`}
-                      >
-                        Send Email
-                      </button>
-                    </div>
-                  </Form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    <header className={`${classes["main_container"]}`}>
+      <Navbar expand="lg" collapseOnSelect>
+        <Container>
+          <LinkContainer to="/">
+            <Navbar.Brand>My Shop</Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            {/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
+            <Nav className="ms-auto">
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <i className="fas fa-shopping-cart"></i> Cart
+                </Nav.Link>
+              </LinkContainer>
+              {userInfo ? (
+                <NavDropdown title={userInfo.name} id="username">
+                  <LinkContainer to="/myprofile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fas fa-user"></i> Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title="Admin" id="adminmenu">
+                  <LinkContainer to="/admin/userlist">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/productlist">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/orderlist">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   );
 };
 
-export default LoginScreen;
+export default NewHomeScreen;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import axios from "axios";
+import { toast } from "react-toastify";
 import classes from "../styles/login.module.css";
 const ForgetPasswordScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,10 @@ const ForgetPasswordScreen = ({ location, history }) => {
       config
     );
     console.log({ data });
-    setEmail("");
+    if (data === "Email sent successfully") {
+      setEmail("");
+      toast.success("Email sent successfully");
+    }
     setMess(data);
   };
 

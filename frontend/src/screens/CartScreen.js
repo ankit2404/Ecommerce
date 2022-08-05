@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
-// import { Form } from "react-bootstrap";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import classes from "../styles/cart.module.css";
 

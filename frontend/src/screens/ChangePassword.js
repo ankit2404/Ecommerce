@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
-// import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 import { updateUserPassword } from "../actions/userAction";
+import Loader from "../components/Loader";
 import classes from "../styles/login.module.css";
 
 const ChangePassword = ({ location, history }) => {
   const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { loading, userInfo } = userLogin;
 
   useEffect(() => {
     if (!userInfo) {
@@ -25,7 +24,7 @@ const ChangePassword = ({ location, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setMessage("Passwords do not match");
+      toast.info("Passwords do not match");
     } else {
       dispatch(updateUserPassword({ password, newPassword }));
     }
@@ -33,9 +32,7 @@ const ChangePassword = ({ location, history }) => {
 
   return (
     <div>
-      {/* {error && <Message variant="danger">{error}</Message>} */}
-      {message && <Message variant="danger">{message}</Message>}
-      {/* {loading && <Loader />} */}
+      {loading && <Loader />}
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>
           <div
