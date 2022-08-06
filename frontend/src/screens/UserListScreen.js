@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listUsers, deleteUser } from "../actions/userAction";
 import classes from "../styles/userList.module.css";
+import { toast } from "react-toastify";
 
 function UserListScreen({ history }) {
   const dispatch = useDispatch();
@@ -31,12 +32,15 @@ function UserListScreen({ history }) {
       dispatch(deleteUser(id));
     }
   };
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
   return (
     <>
       {loading ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
       ) : (
         <div className={`${classes["myordercontainer"]}`}>
           <article className={`${classes["leaderboard"]}`}>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import Paginate from "../components/Paginate";
@@ -11,6 +11,8 @@ import {
 } from "../actions/productActions";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstant";
 import classes from "../styles/productList.module.css";
+import { toast } from "react-toastify";
+import Meta from "../components/Meta";
 
 function ProductListScreen({ history, match }) {
   const pageNumber = match.params.pageNumber || 1;
@@ -69,25 +71,46 @@ function ProductListScreen({ history, match }) {
   const createProductHandler = () => {
     dispatch(createProduct());
   };
+  useEffect(() => {
+    if (errorDelete) {
+      toast.error("Unable to delete product");
+    }
+  }, [errorDelete]);
+
+  useEffect(() => {
+    if (errorCreate) {
+      toast.error("Product is not added");
+    }
+  }, [errorCreate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
+
   return (
     <>
       {loadingDelete && <Loader />}
-      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
       {loadingCreate && <Loader />}
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {loading ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
       ) : (
         <div className={`${classes["myordercontainer"]}`}>
+          <Meta title="All Products" />
           <article className={`${classes["leaderboard"]}`}>
             <header>
               <h1 className={`${classes["leaderboard__title__new"]}`}>
-                <span className={`${classes["leaderboard__title--top"]}`}>
+                <span
+                  className={`${classes["leaderboard__title--top"]}`}
+                  style={{ color: "white" }}
+                >
                   Myshop
                 </span>
-                <span className={`${classes["leaderboard__title--bottom"]}`}>
+                <span
+                  className={`${classes["leaderboard__title--bottom"]}`}
+                  style={{ color: "white" }}
+                >
                   All Products
                 </span>
               </h1>

@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 // import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import { USER_DETAILS_RESET } from "../constants/userConstants";
 import classes from "../styles/placeorder.module.css";
+import { toast } from "react-toastify";
+
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
 
@@ -44,6 +46,12 @@ const PlaceOrderScreen = ({ history }) => {
     }
     // eslint-disable-next-line
   }, [history, success]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -171,7 +179,7 @@ const PlaceOrderScreen = ({ history }) => {
                 <div> Total Price:</div>
                 <div>${cart.totalPrice}</div>
               </div>
-              {error && <Message variant="danger">{error}</Message>}
+              {/* {error && <Message variant="danger">{error}</Message>} */}
               <button
                 className={`${classes["btn"]}  ${classes["btn-primary"]}`}
                 type="button"

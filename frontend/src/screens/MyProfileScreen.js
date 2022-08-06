@@ -3,10 +3,13 @@ import { Form } from "react-bootstrap";
 import classes from "../styles/profile.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userAction";
+import { toast } from "react-toastify";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
+import Meta from "../components/Meta";
+
 function MyProfileScreen({ location, history }) {
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
@@ -18,6 +21,7 @@ function MyProfileScreen({ location, history }) {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
 
   const dispatch = useDispatch();
 
@@ -47,6 +51,7 @@ function MyProfileScreen({ location, history }) {
         setCity(user.city);
         setAddress(user.address);
         setCountry(user.country);
+        setImage(user.image);
       }
     }
   }, [dispatch, history, userInfo, user, success]);
@@ -54,6 +59,12 @@ function MyProfileScreen({ location, history }) {
   const editHandler = () => {
     setEdit(!edit);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -69,17 +80,19 @@ function MyProfileScreen({ location, history }) {
         phone,
         dob,
         country,
+        image,
       })
     );
+    toast.success("Profile Updated Successfully");
   };
   return (
     <>
       {loading ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
       ) : (
         <div className={`${classes["main-content"]}`}>
+          <Meta title="My Profile" />
+
           <div
             className={`${classes["header"]} ${classes["pb-8"]} ${classes["pt-5"]} ${classes["pt-lg-8"]} ${classes["d-flex"]} ${classes["align-items-center"]} ${classes["mycll"]}`}
             style={{ minHeight: "500px" }}
@@ -114,24 +127,15 @@ function MyProfileScreen({ location, history }) {
                 <div
                   className={`${classes["card"]} ${classes["card-profile"]} ${classes["shadow"]}`}
                 >
-                  <div
-                    className={`${classes["row"]} ${classes["justify-content-center"]}`}
-                  >
-                    <div
-                      className={`${classes["col-lg-3"]} ${classes["order-lg-2"]}`}
-                    >
-                      <div className={`${classes["card-profile-image"]}`}>
-                        <img
-                          src="https://cdn.statically.io/img/www.celebrities-contact.com//wp-content/uploads/2019/07/mackenzie-ziegler-email-phone-contact-732.jpg"
-                          alt="ghv"
-                          className={`${classes["rounded-circle"]}`}
-                        />
-                      </div>
-                    </div>
+                  <div className={`${classes["card-profile-image"]}`}>
+                    <img
+                      src={image}
+                      alt="ghv"
+                      className={`${classes["rounded-circle"]}`}
+                      style={{ width: "150px", height: "150px" }}
+                    />
                   </div>
-                  <div
-                    className={`${classes["card-header"]} ${classes["text-center"]} ${classes["border-0"]} ${classes["pt-8"]} ${classes["pt-md-4"]} ${classes[" pb-0"]} ${classes["pb-md-4"]}`}
-                  ></div>
+
                   <div
                     className={`${classes["card-body"]} ${classes["pt-0"]} ${classes["pt-md-4"]}`}
                   >
@@ -373,6 +377,26 @@ function MyProfileScreen({ location, history }) {
                                 disabled={!edit}
                                 value={dob}
                                 onChange={(e) => setDob(e.target.value)}
+                              />
+                            </div>
+                          </div>
+                          <div className={`${classes["col-lg-6"]}`}>
+                            <div
+                              className={`${classes["form-group"]} ${classes["focused"]}`}
+                            >
+                              <label
+                                className={`${classes["form-control-label"]}`}
+                                htmlFor="input-last-name"
+                              >
+                                Profile Image Url
+                              </label>
+                              <input
+                                className={`${classes["form-control"]} ${classes["form-control-alternative"]}`}
+                                type="text"
+                                disabled={!edit}
+                                value={image}
+                                placeholder="Enter Image Url"
+                                onChange={(e) => setImage(e.target.value)}
                               />
                             </div>
                           </div>

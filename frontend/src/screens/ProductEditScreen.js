@@ -2,11 +2,12 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listProductDetails, updateProduct } from "../actions/productActions";
 import { PRODUCT_UPDATE_RESET } from "../constants/productConstant";
 import classes from "../styles/productEdit.module.css";
+import { toast } from "react-toastify";
+import Meta from "../components/Meta";
 
 function ProductEditScreen({ match, history }) {
   const productId = match.params.id;
@@ -89,15 +90,24 @@ function ProductEditScreen({ match, history }) {
       })
     );
   };
+  useEffect(() => {
+    if (error) {
+      toast.error("Unable of fetch product details");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (errorUpdate) {
+      toast.error("Data is not updated");
+    }
+  }, [errorUpdate]);
   return (
     <>
       <div className={`${classes["main_container"]}`}>
+        <Meta title={product?.name} />
         {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
           <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
         ) : (
           <div className={`${classes["review_container"]}`}>
             <div className={`${classes["content"]}`}>

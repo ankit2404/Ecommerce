@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "react-bootstrap";
 import Rating from "../components/Rating";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Meta from "../components/Meta";
 import {
@@ -12,15 +12,19 @@ import {
 } from "../actions/productActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstant";
 import classes from "../styles/productPage.module.css";
+import { toast } from "react-toastify";
 
 function ProductScreen({ match, history }) {
   // const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [reviewed, setReviewed] = useState(false);
+  const [product, setProduct] = useState({});
+  const [load, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { loading, error, product } = productDetails;
+  const { loading, error, product: prod } = productDetails;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -33,15 +37,36 @@ function ProductScreen({ match, history }) {
   } = productReviewCreate;
 
   useEffect(() => {
-    if (successProductReview) {
-      setRating(0);
-      setComment("");
+    if (prod) {
+      setReviewed(false);
+      setProduct(prod);
+      setLoading(false);
+      prod?.reviews?.forEach(
+        (review) => review.user === userInfo._id && setReviewed(true)
+      );
     }
-    if (!product._id || product._id !== match.params.id) {
+  }, [prod, userInfo]);
+
+  useEffect(() => {
+    if (!product?._id || product?._id !== match.params.id) {
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
       dispatch(listProductDetails(match.params.id));
     }
-  }, [dispatch, match, product._id, product.reviews, successProductReview]);
+  }, [dispatch, match, product?._id]);
+
+  useEffect(() => {
+    if (successProductReview) {
+      setRating(0);
+      setComment("");
+      toast.success("Review Added Successfully");
+    }
+  }, [successProductReview]);
+
+  useEffect(() => {
+    if (errorProductReview) {
+      toast.error("Something went wrong");
+    }
+  }, [errorProductReview]);
 
   const addToCartHandler = () => {
     const qty = 1;
@@ -54,54 +79,59 @@ function ProductScreen({ match, history }) {
       createProductReview(match.params.id, {
         rating,
         comment,
+        image: userInfo.image,
       })
     );
   };
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
+
   return (
     <>
-      {loading ? (
+      {load ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Meta title={product.name} />
+          <Meta title={product?.name} />
           <main className={`${classes["container"]} `}>
             <div className={`${classes["left-column"]} `}>
               <img
                 data-image="red"
                 className={`${classes["active"]} `}
-                src={product.image}
-                alt={product.name}
+                src={product?.image}
+                alt={product?.name}
               />
             </div>
             <div className={`${classes["right-column"]}`}>
               <div className={`${classes["product-description"]} `}>
-                <span>{product.category}</span>
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
+                <span>{product?.category}</span>
+                <h3>{product?.name}</h3>
+                <p>{product?.description}</p>
               </div>
 
               <div className={`${classes["product-configuration"]} `}>
                 <div className={`${classes["product-color"]}`}>
                   <span>Rating</span>
                   <Rating
-                    value={product.rating}
-                    text={`${product.numReviwes} reviews`}
+                    value={product?.rating}
+                    text={`${product?.numReviwes} reviews`}
                   />
                 </div>
 
                 <div className={`${classes["cable-config"]}`}>
                   <span>
-                    {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                    {product?.countInStock > 0 ? "In Stock" : "Out Of Stock"}
                   </span>
                 </div>
               </div>
 
               <div className={`${classes["product-price"]}`}>
-                <span>${product.price}</span>
+                <span>${product?.price}</span>
                 <button
-                  disabled={product.countInStock === 0}
+                  disabled={product?.countInStock === 0}
                   className={`${classes["cart-btn"]}`}
                   onClick={addToCartHandler}
                 >
@@ -110,18 +140,19 @@ function ProductScreen({ match, history }) {
               </div>
             </div>
           </main>
-          {product.reviews.length === 0 && <Message>No Reviews</Message>}
-          {product.reviews.length !== 0 && (
+          {product?.reviews?.length === 0 && <p>No Reviews</p>}
+          {product?.reviews?.length !== 0 && (
             <h3 className={`${classes["review_header"]}`}>Reviews</h3>
           )}
           <div className={`${classes["review_box"]}`}>
-            {product.reviews.map((review) => (
+            {product?.reviews?.map((review) => (
               <div className={`${classes["item"]}`} key={review._id}>
                 <div className={`${classes["box"]}`}>
                   <div className={`${classes["img-box"]}`}>
                     <img
-                      src="https://cdn.statically.io/img/www.celebrities-contact.com//wp-content/uploads/2019/07/mackenzie-ziegler-email-phone-contact-732.jpg"
+                      src={review.userImage}
                       alt=""
+                      style={{ height: "100%" }}
                     />
                   </div>
                   <div className={`${classes["detail-box"]}`}>
@@ -137,15 +168,13 @@ function ProductScreen({ match, history }) {
               </div>
             ))}
           </div>
-          <h3 className={`${classes["review_header"]}`}>Write a review</h3>
-          {successProductReview && (
-            <Message variant="success">Review submitted successfully</Message>
+          {userInfo && !userInfo.isAdmin && !reviewed && (
+            <h3 className={`${classes["review_header"]}`}>Write a review</h3>
           )}
+
           {loadingProductReview && <Loader />}
-          {errorProductReview && (
-            <Message variant="danger">{errorProductReview}</Message>
-          )}
-          {userInfo ? (
+
+          {userInfo && !userInfo.isAdmin && !reviewed ? (
             <div className={`${classes["review_container"]}`}>
               <div className={`${classes["content"]}`}>
                 <div className={`${classes["user-details"]}`}>
@@ -193,9 +222,17 @@ function ProductScreen({ match, history }) {
               </div>
             </div>
           ) : (
-            <h3 className={`${classes["review_header"]}`}>
-              Please <Link to="/login">sign in</Link> to write a review
-            </h3>
+            !userInfo && (
+              <h3 className={`${classes["review_header"]}`}>
+                Please <Link to="/login">sign in</Link> to write a review
+              </h3>
+            )
+          )}
+          {reviewed && (
+            <p className={`${classes["review_header"]}`}>
+              {" "}
+              You already reviewed this product
+            </p>
           )}
         </>
       )}

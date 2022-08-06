@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUser } from "../actions/userAction";
 import { USER_UPDATE_RESET } from "../constants/userConstants";
 import classes from "../styles/form.module.css";
+import { toast } from "react-toastify";
 
 function UserEditScreen({ match, history }) {
   const userId = match.params.id;
@@ -46,15 +47,23 @@ function UserEditScreen({ match, history }) {
     e.preventDefault();
     dispatch(updateUser({ _id: userId, name, email, isAdmin }));
   };
+  useEffect(() => {
+    if (errorUpdate) {
+      toast.error("Something went wrong");
+    }
+  }, [errorUpdate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
   return (
     <>
       <div className={`${classes["main_container"]}`}>
         {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
           <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
         ) : (
           <div className={`${classes["review_container"]}`}>
             <div className={`${classes["content"]}`}>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import classes from "../styles/cart.module.css";
-
+import Meta from "../components/Meta";
 function CartScreen({ match, location, history }) {
   const productId = match.params.id;
 
@@ -29,6 +29,7 @@ function CartScreen({ match, location, history }) {
   };
   return (
     <>
+      <Meta title="My Cart" />
       {cartItems.length === 0 ? (
         <Message>
           Your cart is empty <Link to="/">Go Back</Link>

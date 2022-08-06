@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
 import classes from "../styles/login.module.css";
+import Meta from "../components/Meta";
 const ForgetPasswordScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
   const [mess, setMess] = useState("");
@@ -30,6 +31,7 @@ const ForgetPasswordScreen = ({ location, history }) => {
 
   return (
     <div>
+      <Meta title="Welcome To AngelShop" />
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>
           <div

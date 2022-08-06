@@ -4,7 +4,7 @@ const Loader = () => {
   return (
     <div className={classes["main_div"]}>
       <lottie-player
-        src="https://assets3.lottiefiles.com/packages/lf20_jyrxvzzj.json"
+        src="https://assets1.lottiefiles.com/packages/lf20_uiguxhyw.json"
         background="transparent"
         speed="1"
         className={classes["loatify_div"]}

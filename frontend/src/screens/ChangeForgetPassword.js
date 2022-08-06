@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import axios from "axios";
 import classes from "../styles/login.module.css";
+import Meta from "../components/Meta";
 const ChangeForgetPassword = ({ match, history }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,6 +50,7 @@ const ChangeForgetPassword = ({ match, history }) => {
 
   return (
     <>
+      <Meta title="Change Password" />
       {loading && <Loader />}
       <div>
         <section className={classes["ftco-section"]}>

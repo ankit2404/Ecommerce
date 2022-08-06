@@ -23,7 +23,6 @@ import OrderListScreen from "./screens/OrderListScreen";
 import MyProfileScreen from "./screens/MyProfileScreen";
 import MyOrderList from "./screens/MyOrderList";
 import ChangePassword from "./screens/ChangePassword";
-import newHomeScreen from "./screens/NewHomeScreen.jsx";
 import NewOrderListScreen from "./screens/NewOrderListScreen";
 import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
 import ChangeForgetPassword from "./screens/ChangeForgetPassword";
@@ -82,7 +81,6 @@ const App = () => {
               exact
             />
             <Route path="/" component={HomeScreen} exact />
-            <Route path="/new/:id" component={newHomeScreen} exact />
           </>
         </main>
         <Footer />

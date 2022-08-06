@@ -5,6 +5,8 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listOrders } from "../actions/orderActions";
 import classes from "../styles/myOrder.module.css";
+import Meta from "../components/Meta";
+import { toast } from "react-toastify";
 
 function OrderListScreen({ history }) {
   const dispatch = useDispatch();
@@ -22,6 +24,12 @@ function OrderListScreen({ history }) {
       history.push("/login");
     }
   }, [dispatch, history, userInfo]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
   return (
     <>
       {loading ? (
@@ -30,6 +38,7 @@ function OrderListScreen({ history }) {
         <Message variant="danger">{error}</Message>
       ) : (
         <div className={`${classes["myordercontainer"]}`}>
+          <Meta title="All Orders" />
           <article className={`${classes["leaderboard"]}`}>
             <header>
               <h1 className={`${classes["leaderboard__title"]}`}>

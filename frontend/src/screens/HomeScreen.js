@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import { listProducts } from "../actions/productActions";
 import Loader from "../components/Loader";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
+import { toast } from "react-toastify";
 import classes from "../styles/home.module.css";
 
 const HomeScreen = ({ match }) => {
@@ -20,6 +21,11 @@ const HomeScreen = ({ match }) => {
   useEffect(() => {
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, keyword, pageNumber]);
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
 
   return (
     <>
@@ -45,11 +51,9 @@ const HomeScreen = ({ match }) => {
             <div className={`${classes["main_div"]}`}>
               {loading ? (
                 <Loader />
-              ) : error ? (
-                <Message variant="danger">{error}</Message>
               ) : (
                 <>
-                  {products.map((product) => (
+                  {products?.map((product) => (
                     <div key={product._id} className={`${classes["row"]}`}>
                       <Product product={product} />
                     </div>

@@ -14,6 +14,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
   const logoutHandler = () => {
     dispatch(logout());
   };
@@ -61,11 +62,21 @@ const Header = () => {
                     to="/myprofile"
                     className={`${classes["text_profile"]}`}
                   >
-                    <i
+                    <img
+                      src={userInfo?.image}
+                      alt=" "
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                        marginRight: "4px",
+                      }}
+                    />
+                    {/* <i
                       className="fas fa-solid fa-user"
                       style={{ marginRight: "4px" }}
-                    ></i>
-                    Profile
+                    ></i> */}
+                    {userInfo.name}
                   </Link>
 
                   <Button

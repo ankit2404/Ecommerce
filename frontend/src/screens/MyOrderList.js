@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails } from "../actions/userAction";
 import { listMyOrders } from "../actions/orderActions";
 import classes from "../styles/myOrder.module.css";
+import { toast } from "react-toastify";
+import Meta from "../components/Meta";
+
 function MyOrderList({ location, history }) {
   const dispatch = useDispatch();
 
@@ -21,6 +24,13 @@ function MyOrderList({ location, history }) {
   useEffect(() => {
     dispatch(listMyOrders());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (errorOrders) {
+      toast.error("Something went wrong");
+    }
+  }, [errorOrders]);
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
@@ -36,10 +46,9 @@ function MyOrderList({ location, history }) {
     <>
       {loadingOrders ? (
         <Loader />
-      ) : errorOrders ? (
-        <Message variant="danger">{errorOrders}</Message>
       ) : (
         <div className={`${classes["myordercontainer"]}`}>
+          <Meta title="My Orders" />
           <article className={`${classes["leaderboard"]}`}>
             <header>
               <h1 className={`${classes["leaderboard__title"]}`}>

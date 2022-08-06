@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import classes from "../styles/slider.module.css";
 import { listTopProducts } from "../actions/productActions";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { toast } from "react-toastify";
 import SwiperCore, { Lazy, Autoplay, Pagination, Navigation } from "swiper";
 SwiperCore.use([Lazy, Autoplay, Pagination, Navigation]);
 
@@ -18,11 +19,14 @@ const ProductCarousel = () => {
   useEffect(() => {
     dispatch(listTopProducts());
   }, [dispatch]);
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
 
   return loading ? (
     <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
   ) : (
     <div className={`${classes["main_div"]}`} style={{ marginTop: "10px" }}>
       <Swiper
@@ -37,6 +41,7 @@ const ProductCarousel = () => {
           clickable: true,
         }}
         // navigation={true}
+        loop={true}
         modules={[Lazy, Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
@@ -47,8 +52,14 @@ const ProductCarousel = () => {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className={`${classes["slider_image"]} ${classes["swiper-lazy"]}`}
+                  style={{
+                    height: "400px",
+                    width: "auto",
+                    borderRadius: "10px",
+                  }}
+                  className="swiper-lazy"
                 />
+                {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div> */}
               </Link>
               <div className={`${classes["content_des"]}`}>
                 <Link to={`/product/${product._id}`}>

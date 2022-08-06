@@ -16,6 +16,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       name: user.name,
       isAdmin: user.isAdmin,
+      image: user.image,
       token: generateToken(user._id),
     });
   } else {
@@ -75,6 +76,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       country: user.country,
       dob: user.dob,
       isAdmin: user.isAdmin,
+      image: user.image,
     });
   } else {
     res.status(401);
@@ -98,6 +100,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.country = req.body.country || user.country;
     user.dob = req.body.dob || user.dob;
     user.email = user.email;
+    user.image = req.body.image || user.image;
     // if (req.body.password) {
     //   user.password = req.body.password;
     // }
@@ -115,6 +118,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       country: updatedUser.country,
       dob: updatedUser.dob,
       isAdmin: updatedUser.isAdmin,
+      image: updatedUser.image,
       token: generateToken(updatedUser._id),
     });
   } else {

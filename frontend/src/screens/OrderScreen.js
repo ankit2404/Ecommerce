@@ -3,7 +3,7 @@ import axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
+// import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {
   getOrderDetails,
@@ -15,6 +15,8 @@ import {
   ORDER_DELIVER_RESET,
 } from "../constants/orderConstants";
 import classes from "../styles/placeorder.module.css";
+import { toast } from "react-toastify";
+import Meta from "../components/Meta";
 
 const OrderListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
@@ -70,6 +72,12 @@ const OrderListScreen = ({ history, match }) => {
     }
   }, [dispatch, orderId, successPay, successDeliver, order, userInfo, history]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
+
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);
     dispatch(payOrder(orderId, paymentResult));
@@ -80,10 +88,9 @@ const OrderListScreen = ({ history, match }) => {
   };
   return loading ? (
     <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
   ) : (
     <>
+      <Meta title="AngelShop" />
       <div className={`${classes["myordercontainer"]}`}>
         <article className={`${classes["leaderboard"]}`}>
           <h2 className={`${classes["placeorder_header"]}`}>Shipping:</h2>

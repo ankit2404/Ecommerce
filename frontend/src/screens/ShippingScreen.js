@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-
+import Meta from "../components/Meta";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { saveShippingAddress } from "../actions/cartActions";
 import classes from "../styles/productEdit.module.css";
@@ -25,6 +25,7 @@ function ShippingScreen({ history }) {
   return (
     <>
       <div className={`${classes["main_container"]}`}>
+        <Meta title="Place Order" />
         <CheckoutSteps step1 step2 />
         <div className={`${classes["review_container"]}`}>
           <div className={`${classes["content"]}`}>

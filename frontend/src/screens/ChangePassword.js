@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { updateUserPassword } from "../actions/userAction";
 import Loader from "../components/Loader";
 import classes from "../styles/login.module.css";
+import Meta from "../components/Meta";
 
 const ChangePassword = ({ location, history }) => {
   const [newPassword, setNewPassword] = useState("");
@@ -32,6 +33,7 @@ const ChangePassword = ({ location, history }) => {
 
   return (
     <div>
+      <Meta title="Change Password" />
       {loading && <Loader />}
       <section className={classes["ftco-section"]}>
         <div className={classes.container}>
