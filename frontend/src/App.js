@@ -82,7 +82,7 @@ const App = () => {
               exact
             />
             <Route path="/" component={HomeScreen} exact />
-            <Route path="/new" component={newHomeScreen} exact />
+            <Route path="/new/:id" component={newHomeScreen} exact />
           </>
         </main>
         <Footer />

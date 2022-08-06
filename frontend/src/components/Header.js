@@ -62,7 +62,7 @@ const Header = () => {
                     className={`${classes["text_profile"]}`}
                   >
                     <i
-                      class="fas fa-solid fa-user"
+                      className="fas fa-solid fa-user"
                       style={{ marginRight: "4px" }}
                     ></i>
                     Profile

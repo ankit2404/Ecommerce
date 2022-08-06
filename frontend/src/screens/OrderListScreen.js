@@ -33,10 +33,16 @@ function OrderListScreen({ history }) {
           <article className={`${classes["leaderboard"]}`}>
             <header>
               <h1 className={`${classes["leaderboard__title"]}`}>
-                <span className={`${classes["leaderboard__title--top"]}`}>
+                <span
+                  className={`${classes["leaderboard__title--top"]}`}
+                  style={{ color: "white" }}
+                >
                   Myshop
                 </span>
-                <span className={`${classes["leaderboard__title--bottom"]}`}>
+                <span
+                  className={`${classes["leaderboard__title--bottom"]}`}
+                  style={{ color: "white" }}
+                >
                   Customer Orders
                 </span>
               </h1>

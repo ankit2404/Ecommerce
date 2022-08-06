@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 // import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import { USER_DETAILS_RESET } from "../constants/userConstants";
-
+import classes from "../styles/placeorder.module.css";
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
 
@@ -50,7 +49,7 @@ const PlaceOrderScreen = ({ history }) => {
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
-        shippingAddress:  cart.shippingAddress,
+        shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
@@ -59,109 +58,133 @@ const PlaceOrderScreen = ({ history }) => {
       })
     );
   };
-
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
-      <Row>
-        <Col md={8}>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <h2>Shipping</h2>
-              <p>
-                <strong>Address:</strong>
-                {cart.shippingAddress.address}, {cart.shippingAddress.city}{" "}
-                {cart.shippingAddress.postalCode},{" "}
-                {cart.shippingAddress.country}
-              </p>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {cart.paymentMethod}
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h2>Order Items</h2>
-              {cart.cartItems.length === 0 ? (
-                <Message>Your cart is empty</Message>
-              ) : (
-                <ListGroup variant="flush">
-                  {cart.cartItems.map((item, index) => (
-                    <ListGroup.Item key={index}>
-                      <Row>
-                        <Col md={1}>
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fluid
-                            rounded
-                          />
-                        </Col>
-                        <Col>
-                          <Link to={`/product/${item.product}`}>
-                            {item.name}
-                          </Link>
-                        </Col>
-                        <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                {error && <Message variant="danger">{error}</Message>}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type="button"
-                  className="btn-block"
-                  disabled={cart.cartItems === 0}
-                  onClick={placeOrderHandler}
+      <div className={`${classes["myordercontainer"]}`}>
+        <article className={`${classes["leaderboard"]}`}>
+          <h2 className={`${classes["placeorder_header"]}`}>Shipping:</h2>
+          <p>
+            <span
+              style={{ fontWeight: "600", fontSize: "18px", color: "black" }}
+            >
+              Address:{" "}
+            </span>
+            {cart.shippingAddress.address}, {cart.shippingAddress.city}{" "}
+            {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
+          </p>
+          <h2 className={`${classes["placeorder_header"]}`}>Payment Method:</h2>
+          <p>
+            <span
+              style={{ fontWeight: "600", fontSize: "18px", color: "black" }}
+            >
+              Method:{" "}
+            </span>
+            Paypal
+          </p>
+          <header>
+            <h1 className={`${classes["leaderboard__title"]}`}>
+              <span className={`${classes["leaderboard__title--top"]}`}>
+                AngelShop
+              </span>
+              <span className={`${classes["leaderboard__title--bottom"]}`}>
+                Order Items
+              </span>
+            </h1>
+          </header>
+          {cart.cartItems.length === 0 ? (
+            <h2 className={`${classes["placeorder_header"]}`}>
+              Your cart is empty
+            </h2>
+          ) : (
+            <div className={`${classes["leaderboard__profiles"]} `}>
+              <article
+                className={`${classes["leaderboard__profile"]}  ${classes["div-flex"]} ${classes["front"]}`}
+              >
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
+                  style={{ width: "15%" }}
                 >
-                  Place Order
-                </Button>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+                  Image
+                </span>
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
+                  style={{ width: "50%" }}
+                >
+                  Product Name
+                </span>
+                <span
+                  className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
+                  style={{ width: "10%" }}
+                >
+                  Total
+                </span>
+              </article>
+              {cart.cartItems.length === 0 ? "No Product In Cart" : ""}
+              {cart.cartItems.map((item) => (
+                <article
+                  key={item.product}
+                  className={`${classes["leaderboard__profile"]} ${classes["for-user"]} `}
+                >
+                  <img
+                    src={item.image}
+                    alt="Product"
+                    className={`${classes["leaderboard__picture"]} ${classes["picture"]}`}
+                  />
+                  <span
+                    className={`${classes["leaderboard__name"]} ${classes["user__name"]}`}
+                  >
+                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                  </span>
+                  <span
+                    className={`${classes["leaderboard__name"]} ${classes["user__email"]}`}
+                  >
+                    {item.qty} x ${item.price} = ${item.qty * item.price}
+                  </span>
+                </article>
+              ))}
+            </div>
+          )}
+        </article>
+        <article className={`${classes["nextBox"]}`}>
+          <article className={`${classes["leaderboard__profile__new"]}`}>
+            <div className={`${classes["checkout__box"]}`}>
+              <h3 style={{ margin: "auto" }}>Order Summary</h3>
+              <div className={`${classes["eachitem_div"]}`}>
+                <div> Items Price:</div>
+                <div>
+                  $
+                  {cart.cartItems
+                    .reduce((acc, item) => acc + item.qty * item.price, 0)
+                    .toFixed(2)}
+                </div>
+              </div>
+              <div className={`${classes["eachitem_div"]}`}>
+                <div> Shipping Price:</div>
+                <div>${cart.shippingPrice}</div>
+              </div>
+              <div className={`${classes["eachitem_div"]}`}>
+                <div> Total Tax:</div>
+                <div>${cart.taxPrice}</div>
+              </div>
+              <div className={`${classes["eachitem_div"]}`}>
+                <div> Total Price:</div>
+                <div>${cart.totalPrice}</div>
+              </div>
+              {error && <Message variant="danger">{error}</Message>}
+              <button
+                className={`${classes["btn"]}  ${classes["btn-primary"]}`}
+                type="button"
+                disabled={cart.cartItems.length === 0}
+                onClick={placeOrderHandler}
+                style={{ margin: "auto" }}
+              >
+                Place Order
+              </button>
+            </div>
+          </article>
+        </article>
+      </div>
     </>
   );
 };

@@ -19,7 +19,6 @@ const LoginScreen = ({ location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      toast.success("Login Successful");
       history.push(redirect);
     } else if (error) {
       toast.error("Enter Password Again");
