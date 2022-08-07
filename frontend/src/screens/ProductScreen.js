@@ -140,7 +140,9 @@ function ProductScreen({ match, history }) {
               </div>
             </div>
           </main>
-          {product?.reviews?.length === 0 && <p>No Reviews</p>}
+          {product?.reviews?.length === 0 && (
+            <p style={{ marginLeft: "10px" }}>No Reviews</p>
+          )}
           {product?.reviews?.length !== 0 && (
             <h3 className={`${classes["review_header"]}`}>Reviews</h3>
           )}

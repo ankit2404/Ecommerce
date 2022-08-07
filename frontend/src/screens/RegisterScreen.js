@@ -31,7 +31,12 @@ const RegisterScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (password.length < 8) {
+      toast.info("Password is too short");
+      setPassword("");
+      setConfirmPassword("");
+      return;
+    } else if (password !== confirmPassword) {
       toast.info("Passwords do not match");
       setPassword("");
       setConfirmPassword("");

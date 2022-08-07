@@ -27,6 +27,12 @@ function UserListScreen({ history }) {
     }
   }, [dispatch, history, successDelete, userInfo]);
 
+  useEffect(() => {
+    if (successDelete) {
+      toast.success("User deleted Successfully");
+    }
+  }, [successDelete]);
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
       dispatch(deleteUser(id));
