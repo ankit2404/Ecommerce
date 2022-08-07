@@ -46,7 +46,7 @@ function OrderListScreen({ history }) {
                   className={`${classes["leaderboard__title--top"]}`}
                   style={{ color: "white" }}
                 >
-                  Myshop
+                  AngelShop
                 </span>
                 <span
                   className={`${classes["leaderboard__title--bottom"]}`}

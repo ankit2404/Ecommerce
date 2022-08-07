@@ -53,7 +53,7 @@ function MyOrderList({ location, history }) {
             <header>
               <h1 className={`${classes["leaderboard__title"]}`}>
                 <span className={`${classes["leaderboard__title--top"]}`}>
-                  Myshop
+                  AngelShop
                 </span>
                 <span className={`${classes["leaderboard__title--bottom"]}`}>
                   My Orders
