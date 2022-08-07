@@ -53,4 +53,4 @@ app.use(notFound);
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-app.listen(port, console.log(`server is on ${process.env.Node_ENV} 5000`));
+app.listen(port, () => console.log(`server is on Port ${port}`));
