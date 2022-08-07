@@ -52,12 +52,7 @@ const ProductCarousel = () => {
                 <img
                   src={product.image}
                   alt={product.name}
-                  style={{
-                    height: "400px",
-                    width: "auto",
-                    borderRadius: "10px",
-                  }}
-                  className="swiper-lazy"
+                  className={`${classes["swiper_image_class"]}`}
                 />
                 {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div> */}
               </Link>
