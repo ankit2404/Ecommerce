@@ -58,15 +58,14 @@ const HomeScreen = ({ match }) => {
                       <Product product={product} />
                     </div>
                   ))}
-
-                  <Paginate
-                    pages={pages}
-                    page={page}
-                    keyword={keyword ? keyword : ""}
-                  />
                 </>
               )}
             </div>
+            <Paginate
+              pages={pages}
+              page={page}
+              keyword={keyword ? keyword : ""}
+            />
           </div>
         </section>
       </div>
