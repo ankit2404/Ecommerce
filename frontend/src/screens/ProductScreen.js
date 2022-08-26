@@ -37,13 +37,16 @@ function ProductScreen({ match, history }) {
   } = productReviewCreate;
 
   useEffect(() => {
-    if (prod) {
+    if (prod && userInfo) {
       setReviewed(false);
       setProduct(prod);
       setLoading(false);
       prod?.reviews?.forEach(
         (review) => review.user === userInfo._id && setReviewed(true)
       );
+    } else {
+      setProduct(prod);
+      setLoading(false);
     }
   }, [prod, userInfo]);
 
