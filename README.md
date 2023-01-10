@@ -1,4 +1,3 @@
-# Ecommerce
 # AngelShop
 
 ## How to setup project
